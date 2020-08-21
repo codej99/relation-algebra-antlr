@@ -1,7 +1,7 @@
 package org.antlr.study.caculator;
 
-import org.antlr.study.CalculatorBaseVisitor;
-import org.antlr.study.CalculatorParser;
+import org.antlr.study.generated.CalculatorBaseVisitor;
+import org.antlr.study.generated.CalculatorParser;
 
 public class CalculatorInterpreter extends CalculatorBaseVisitor {
 

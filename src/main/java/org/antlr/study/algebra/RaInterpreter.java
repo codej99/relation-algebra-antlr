@@ -1,7 +1,7 @@
 package org.antlr.study.algebra;
 
-import org.antlr.study.RaBaseVisitor;
-import org.antlr.study.RaParser;
+import org.antlr.study.generated.RaBaseVisitor;
+import org.antlr.study.generated.RaParser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

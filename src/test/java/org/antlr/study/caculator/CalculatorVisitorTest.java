@@ -1,8 +1,7 @@
 package org.antlr.study.caculator;
 
-import junit.framework.TestCase;
-import org.antlr.study.CalculatorLexer;
-import org.antlr.study.CalculatorParser;
+import org.antlr.study.generated.CalculatorLexer;
+import org.antlr.study.generated.CalculatorParser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;

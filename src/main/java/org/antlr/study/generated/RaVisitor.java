@@ -53,6 +53,12 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRightJoin(RaParser.RightJoinContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link RaParser#fullJoin}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFullJoin(RaParser.FullJoinContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link RaParser#catesianProduct}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

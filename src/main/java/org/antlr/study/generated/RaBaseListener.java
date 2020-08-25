@@ -100,6 +100,18 @@ public class RaBaseListener implements RaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFullJoin(RaParser.FullJoinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFullJoin(RaParser.FullJoinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCatesianProduct(RaParser.CatesianProductContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -66,6 +66,13 @@ public class RaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements RaV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitFullJoin(RaParser.FullJoinContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitCatesianProduct(RaParser.CatesianProductContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

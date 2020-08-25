@@ -127,6 +127,25 @@ public class RaInterpreter extends RaBaseVisitor {
         return query.toString();
     }
 
+    @Override public String visitFullJoin(RaParser.FullJoinContext ctx) {
+        log.debug("==============================");
+        log.debug("Parent is Empty={}", ctx.getParent().isEmpty());
+        boolean nesting = !ctx.getParent().isEmpty();
+        Object left = visit(ctx.expr(0));
+        Object right = visit(ctx.expr(1));
+        log.debug("nesting={} - left={} - right={} - condition={}", nesting, left, right, ctx.condition());
+        StringJoiner subQuery = new StringJoiner(SPACE);
+        if (ctx.condition() != null)
+            subQuery.add(left.toString()).add("FULL OUTER JOIN").add(right.toString()).add("ON").add(ctx.condition().getText());
+        StringJoiner query = new StringJoiner(SPACE);
+        if (nesting)
+            query.add(subQuery.toString());
+        else
+            query.add("SELECT * FROM").add(subQuery.toString());
+
+        return query.toString();
+    }
+
     @Override
     public String visitProjection(RaParser.ProjectionContext ctx) {
         log.debug("==============================");

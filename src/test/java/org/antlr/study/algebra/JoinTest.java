@@ -191,4 +191,43 @@ public class JoinTest {
         Object query = interpreter.visit(tree);
         assertEquals("SELECT R.a FROM R RIGHT JOIN T ON R.b=T.b WHERE R.a>1", query);
     }
+
+    @Test
+    public void fullJoinTest() {
+        String ra = "(R) ⟗ R.b = T.b (T)";
+        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        RaParser parser = new RaParser(tokens);
+        ParseTree tree = parser.expr();
+        log.info(tree.toStringTree(parser));
+        RaInterpreter interpreter = new RaInterpreter();
+        Object query = interpreter.visit(tree);
+        assertEquals("SELECT * FROM R FULL OUTER JOIN T ON R.b=T.b", query);
+    }
+
+    @Test
+    public void fullJoinSelectionTest() {
+        String ra = "σ R.a > 1 ((R) ⟗ R.b = T.b (T))";
+        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        RaParser parser = new RaParser(tokens);
+        ParseTree tree = parser.expr();
+        log.info(tree.toStringTree(parser));
+        RaInterpreter interpreter = new RaInterpreter();
+        Object query = interpreter.visit(tree);
+        assertEquals("SELECT * FROM R FULL OUTER JOIN T ON R.b=T.b WHERE R.a>1", query);
+    }
+
+    @Test
+    public void fullJoinSelectionProjectionTest() {
+        String ra = "π R.a σ R.a > 1 ((R) ⟗ R.b = T.b (T))";
+        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        RaParser parser = new RaParser(tokens);
+        ParseTree tree = parser.expr();
+        log.info(tree.toStringTree(parser));
+        RaInterpreter interpreter = new RaInterpreter();
+        Object query = interpreter.visit(tree);
+        assertEquals("SELECT R.a FROM R FULL OUTER JOIN T ON R.b=T.b WHERE R.a>1", query);
+    }
 }

@@ -7,6 +7,7 @@ expr :
     | naturalJoin
     | leftJoin
     | rightJoin
+    | fullJoin
     | catesianProduct
     | selection
     | projection
@@ -31,11 +32,15 @@ naturalJoin :
 ;
 
 leftJoin :
-    '('expr')' LEFT_JOIN condition '('expr')'
+    '('expr')' LEFT_OUTER_JOIN condition '('expr')'
 ;
 
 rightJoin :
-    '('expr')' RIGHT_JOIN condition '('expr')'
+    '('expr')' RIGHT_OUTER_JOIN condition '('expr')'
+;
+
+fullJoin :
+    '('expr')' FULL_OUTER_JOIN condition '('expr')'
 ;
 
 catesianProduct :
@@ -157,8 +162,10 @@ DIFFERENCE : '-';
 CARTESIAN : '⨯';
 
 NATURAL_JOIN : '⨝';
-LEFT_JOIN : '⟕';
-RIGHT_JOIN : '⟖';
+LEFT_OUTER_JOIN : '⟕';
+RIGHT_OUTER_JOIN : '⟖';
+FULL_OUTER_JOIN : '⟗';
+
 ORDER_BY: 'τ';
 GROUP_BY: 'γ';
 

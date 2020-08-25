@@ -78,6 +78,16 @@ public interface RaListener extends ParseTreeListener {
 	 */
 	void exitRightJoin(RaParser.RightJoinContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link RaParser#fullJoin}.
+	 * @param ctx the parse tree
+	 */
+	void enterFullJoin(RaParser.FullJoinContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#fullJoin}.
+	 * @param ctx the parse tree
+	 */
+	void exitFullJoin(RaParser.FullJoinContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link RaParser#catesianProduct}.
 	 * @param ctx the parse tree
 	 */

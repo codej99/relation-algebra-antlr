@@ -1,29 +1,54 @@
 grammar Ra;
 
 expr :
-    naturaljoin
-    | crossjoin
+    intersection
+    | union
+    | setDifference
+    | naturalJoin
+    | leftJoin
+    | rightJoin
+    | catesianProduct
     | selection
     | projection
     | rename
     | relation
 ;
 
-projection :
-    PROJECTION attributes '('expr')'
-    | PROJECTION attributes expr
+intersection :
+    '('expr')' INTERSECTION '('expr')'
+;
+
+union :
+    '('expr')' UNION '('expr')'
+;
+
+setDifference :
+    '('expr')' DIFFERENCE '('expr')'
+;
+
+naturalJoin :
+    '('expr')' NATURAL_JOIN condition? '('expr')'
+;
+
+leftJoin :
+    '('expr')' LEFT_JOIN condition '('expr')'
+;
+
+rightJoin :
+    '('expr')' RIGHT_JOIN condition '('expr')'
+;
+
+catesianProduct :
+    '('expr')' (CARTESIAN '('expr')')+
 ;
 
 selection :
     SELECTION conditions '('expr')'
 ;
 
-naturaljoin :
-    '('expr')' NATURAL_JOIN '('expr')'
-;
-
-crossjoin :
-    '('expr')' (CARTESIAN '('expr')')+
+projection :
+    PROJECTION attributes '('expr')'
+    | PROJECTION attributes expr
 ;
 
 rename :
@@ -51,7 +76,7 @@ order :
 ;
 
 direction :
-    'asc' | 'desc'
+    ASC | DESC
 ;
 
 attributes :
@@ -76,7 +101,7 @@ renameAttr :
 conditions :
     condition
     | condition logicalOps conditions
-//    | logicalOps conditions
+//    | NOT conditions
     | '('conditions')'
 ;
 
@@ -85,7 +110,7 @@ condition :
 ;
 
 logicalOps :
-    'AND' | 'OR' | 'NOT'
+    AND | OR
 ;
 
 compared :
@@ -101,34 +126,6 @@ data :
 ;
 
 // Lexer Rule
-PROJECTION : 'π';
-SELECTION : 'σ';
-RENAME : 'ρ';
-RENAME_ATTR : '←';
-CARTESIAN : '⨯';
-NATURAL_JOIN : '⨝';
-LEFT_JOIN : '⟕';
-RIGHT_JOIN : '⟖';
-ORDER_BY: 'τ';
-GROUP_BY: 'γ';
-
-UNION : '∪';
-INTERSECTION : '∩';
-
-STRING: [a-zA-Z0-9_']+ ;
-NUMBER: [0-9]+ ;
-
-NOT_EQUAL: '!=';
-EQUAL: '==';
-GREATER_EQUAL: '>=';
-GREATER: '>';
-LESSER_EQUAL: '<=';
-LESSER: '<';
-
-LOGICAL_OPS :
-    AND | OR | NOT
-;
-
 AND:
     A N D
 ;
@@ -148,6 +145,32 @@ ASC:
 DESC:
     D E S C
 ;
+
+PROJECTION : 'π';
+SELECTION : 'σ';
+RENAME : 'ρ';
+RENAME_ATTR : '←';
+
+UNION : '∪';
+INTERSECTION : '∩';
+DIFFERENCE : '-';
+CARTESIAN : '⨯';
+
+NATURAL_JOIN : '⨝';
+LEFT_JOIN : '⟕';
+RIGHT_JOIN : '⟖';
+ORDER_BY: 'τ';
+GROUP_BY: 'γ';
+
+NOT_EQUAL: '!=';
+EQUAL: '=';
+GREATER_EQUAL: '>=';
+GREATER: '>';
+LESSER_EQUAL: '<=';
+LESSER: '<';
+
+STRING: [a-zA-Z0-9_']+ ;
+NUMBER: [0-9]+ ;
 
 WS
 :

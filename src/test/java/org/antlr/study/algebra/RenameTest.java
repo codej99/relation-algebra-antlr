@@ -1,6 +1,5 @@
 package org.antlr.study.algebra;
 
-import org.antlr.study.algebra.backup.RaInterpreterTest;
 import org.antlr.study.generated.RaLexer;
 import org.antlr.study.generated.RaParser;
 import org.antlr.v4.runtime.CharStreams;
@@ -13,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import static org.junit.Assert.assertEquals;
 
 public class RenameTest {
-    private static Logger log = LoggerFactory.getLogger(RaInterpreterTest.class);
+    private static final Logger log = LoggerFactory.getLogger(RenameTest.class);
 
     @Test
     public void 리네임_릴레이션_only_구문테스트() {

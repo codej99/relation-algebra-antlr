@@ -17,6 +17,117 @@ public class RaInterpreter extends RaBaseVisitor {
     boolean nested = false;
 
     @Override
+    public String visitIntersection(RaParser.IntersectionContext ctx) {
+        log.debug("==============================");
+        Object left = visit(ctx.expr(0));
+        Object right = visit(ctx.expr(1));
+        log.debug("left={} - right={}", left, right);
+        StringJoiner subQuery = new StringJoiner(SPACE);
+        subQuery.add(left.toString()).add("INTERSECT").add(right.toString());
+        return subQuery.toString();
+    }
+
+    @Override
+    public String visitUnion(RaParser.UnionContext ctx) {
+        log.debug("==============================");
+        Object left = visit(ctx.expr(0));
+        Object right = visit(ctx.expr(1));
+        log.debug("left={} - right={}", left, right);
+        StringJoiner subQuery = new StringJoiner(SPACE);
+        subQuery.add(left.toString()).add("UNION").add(right.toString());
+        return subQuery.toString();
+    }
+
+    @Override
+    public String visitSetDifference(RaParser.SetDifferenceContext ctx) {
+        log.debug("==============================");
+        Object left = visit(ctx.expr(0));
+        Object right = visit(ctx.expr(1));
+        log.debug("left={} - right={}", left, right);
+        StringJoiner subQuery = new StringJoiner(SPACE);
+        subQuery.add(left.toString()).add("EXCEPT").add(right.toString());
+        return subQuery.toString();
+    }
+
+    @Override
+    public String visitNaturalJoin(RaParser.NaturalJoinContext ctx) {
+        log.debug("==============================");
+        log.debug("Parent is Empty={}", ctx.getParent().isEmpty());
+        boolean nesting = !ctx.getParent().isEmpty();
+        Object left = visit(ctx.expr(0));
+        Object right = visit(ctx.expr(1));
+        log.debug("nesting={} - left={} - right={} - condition={}", nesting, left, right, ctx.condition());
+        StringJoiner subQuery = new StringJoiner(SPACE);
+        if (ctx.condition() == null)
+            subQuery.add(left.toString()).add("NATURAL JOIN").add(right.toString());
+        else
+            subQuery.add(left.toString()).add("INNER JOIN").add(right.toString()).add("ON").add(ctx.condition().getText());
+        StringJoiner query = new StringJoiner(SPACE);
+        if (nesting)
+            query.add(subQuery.toString());
+        else
+            query.add("SELECT * FROM").add(subQuery.toString());
+
+        return query.toString();
+    }
+
+    @Override
+    public String visitCatesianProduct(RaParser.CatesianProductContext ctx) {
+        log.debug("==============================");
+        log.debug("Parent is Empty={}", ctx.getParent().isEmpty());
+        boolean nesting = !ctx.getParent().isEmpty();
+        String subQuery = ctx.expr().stream().map(RuleContext::getText).collect(Collectors.joining(","));
+        log.debug("nesting={} - subQuery={}", nesting, subQuery);
+        StringJoiner query = new StringJoiner(SPACE);
+        if (nesting)
+            query.add(subQuery);
+        else
+            query.add("SELECT * FROM").add(subQuery);
+
+        return query.toString();
+    }
+
+    @Override
+    public String visitLeftJoin(RaParser.LeftJoinContext ctx) {
+        log.debug("==============================");
+        log.debug("Parent is Empty={}", ctx.getParent().isEmpty());
+        boolean nesting = !ctx.getParent().isEmpty();
+        Object left = visit(ctx.expr(0));
+        Object right = visit(ctx.expr(1));
+        log.debug("nesting={} - left={} - right={} - condition={}", nesting, left, right, ctx.condition());
+        StringJoiner subQuery = new StringJoiner(SPACE);
+        if (ctx.condition() != null)
+            subQuery.add(left.toString()).add("LEFT JOIN").add(right.toString()).add("ON").add(ctx.condition().getText());
+        StringJoiner query = new StringJoiner(SPACE);
+        if (nesting)
+            query.add(subQuery.toString());
+        else
+            query.add("SELECT * FROM").add(subQuery.toString());
+
+        return query.toString();
+    }
+
+    @Override
+    public String visitRightJoin(RaParser.RightJoinContext ctx) {
+        log.debug("==============================");
+        log.debug("Parent is Empty={}", ctx.getParent().isEmpty());
+        boolean nesting = !ctx.getParent().isEmpty();
+        Object left = visit(ctx.expr(0));
+        Object right = visit(ctx.expr(1));
+        log.debug("nesting={} - left={} - right={} - condition={}", nesting, left, right, ctx.condition());
+        StringJoiner subQuery = new StringJoiner(SPACE);
+        if (ctx.condition() != null)
+            subQuery.add(left.toString()).add("RIGHT JOIN").add(right.toString()).add("ON").add(ctx.condition().getText());
+        StringJoiner query = new StringJoiner(SPACE);
+        if (nesting)
+            query.add(subQuery.toString());
+        else
+            query.add("SELECT * FROM").add(subQuery.toString());
+
+        return query.toString();
+    }
+
+    @Override
     public String visitProjection(RaParser.ProjectionContext ctx) {
         log.debug("==============================");
         boolean nesting = nested;
@@ -84,39 +195,6 @@ public class RaInterpreter extends RaBaseVisitor {
         return query.toString();
     }
 
-    @Override
-    public String visitNaturaljoin(RaParser.NaturaljoinContext ctx) {
-        log.debug("==============================");
-        boolean nesting = nested;
-        Object left = visit(ctx.expr(0));
-        Object right = visit(ctx.expr(1));
-        log.debug("nesting={} - left={} - right={}", nesting, left, right);
-        StringBuilder subQuery = new StringBuilder();
-        subQuery.append(left).append(SPACE).append("NATURAL JOIN").append(SPACE).append(right);
-        StringBuilder query = new StringBuilder();
-        if (nesting)
-            query.append(subQuery.toString());
-        else
-            query.append("SELECT * FROM").append(SPACE).append(subQuery);
-
-        return query.toString();
-    }
-
-    @Override
-    public String visitCrossjoin(RaParser.CrossjoinContext ctx) {
-        log.debug("==============================");
-        boolean nesting = nested;
-        String subQuery = ctx.expr().stream().map(RuleContext::getText).collect(Collectors.joining(","));
-        log.debug("nesting={} - subQuery={}", nesting, subQuery);
-        StringBuilder query = new StringBuilder();
-        if (nesting)
-            query.append(subQuery);
-        else
-            query.append("SELECT * FROM").append(SPACE).append(subQuery);
-
-        return query.toString();
-    }
-
     /**
      * Relation이 단순 문자열일 경우
      *
@@ -142,9 +220,7 @@ public class RaInterpreter extends RaBaseVisitor {
         log.debug("==============================");
         log.debug("nested relation={}", ctx.expr().getText());
         nested = true;
-        Object expr = visit(ctx.expr());
-        nested = false;
-        return expr;
+        return visit(ctx.expr());
     }
 
     /**

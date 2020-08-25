@@ -18,15 +18,75 @@ public interface RaListener extends ParseTreeListener {
 	 */
 	void exitExpr(RaParser.ExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RaParser#projection}.
+	 * Enter a parse tree produced by {@link RaParser#intersection}.
 	 * @param ctx the parse tree
 	 */
-	void enterProjection(RaParser.ProjectionContext ctx);
+	void enterIntersection(RaParser.IntersectionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RaParser#projection}.
+	 * Exit a parse tree produced by {@link RaParser#intersection}.
 	 * @param ctx the parse tree
 	 */
-	void exitProjection(RaParser.ProjectionContext ctx);
+	void exitIntersection(RaParser.IntersectionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RaParser#union}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnion(RaParser.UnionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#union}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnion(RaParser.UnionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RaParser#setDifference}.
+	 * @param ctx the parse tree
+	 */
+	void enterSetDifference(RaParser.SetDifferenceContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#setDifference}.
+	 * @param ctx the parse tree
+	 */
+	void exitSetDifference(RaParser.SetDifferenceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RaParser#naturalJoin}.
+	 * @param ctx the parse tree
+	 */
+	void enterNaturalJoin(RaParser.NaturalJoinContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#naturalJoin}.
+	 * @param ctx the parse tree
+	 */
+	void exitNaturalJoin(RaParser.NaturalJoinContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RaParser#leftJoin}.
+	 * @param ctx the parse tree
+	 */
+	void enterLeftJoin(RaParser.LeftJoinContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#leftJoin}.
+	 * @param ctx the parse tree
+	 */
+	void exitLeftJoin(RaParser.LeftJoinContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RaParser#rightJoin}.
+	 * @param ctx the parse tree
+	 */
+	void enterRightJoin(RaParser.RightJoinContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#rightJoin}.
+	 * @param ctx the parse tree
+	 */
+	void exitRightJoin(RaParser.RightJoinContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RaParser#catesianProduct}.
+	 * @param ctx the parse tree
+	 */
+	void enterCatesianProduct(RaParser.CatesianProductContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#catesianProduct}.
+	 * @param ctx the parse tree
+	 */
+	void exitCatesianProduct(RaParser.CatesianProductContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RaParser#selection}.
 	 * @param ctx the parse tree
@@ -38,25 +98,15 @@ public interface RaListener extends ParseTreeListener {
 	 */
 	void exitSelection(RaParser.SelectionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link RaParser#naturaljoin}.
+	 * Enter a parse tree produced by {@link RaParser#projection}.
 	 * @param ctx the parse tree
 	 */
-	void enterNaturaljoin(RaParser.NaturaljoinContext ctx);
+	void enterProjection(RaParser.ProjectionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link RaParser#naturaljoin}.
+	 * Exit a parse tree produced by {@link RaParser#projection}.
 	 * @param ctx the parse tree
 	 */
-	void exitNaturaljoin(RaParser.NaturaljoinContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RaParser#crossjoin}.
-	 * @param ctx the parse tree
-	 */
-	void enterCrossjoin(RaParser.CrossjoinContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RaParser#crossjoin}.
-	 * @param ctx the parse tree
-	 */
-	void exitCrossjoin(RaParser.CrossjoinContext ctx);
+	void exitProjection(RaParser.ProjectionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RaParser#rename}.
 	 * @param ctx the parse tree

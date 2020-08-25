@@ -1,6 +1,5 @@
 package org.antlr.study.algebra;
 
-import org.antlr.study.algebra.backup.RaInterpreterTest;
 import org.antlr.study.generated.RaLexer;
 import org.antlr.study.generated.RaParser;
 import org.antlr.v4.runtime.CharStreams;
@@ -13,7 +12,20 @@ import org.slf4j.LoggerFactory;
 import static org.junit.Assert.assertEquals;
 
 public class ProjectionTest {
-    private static Logger log = LoggerFactory.getLogger(RaInterpreterTest.class);
+    private static final Logger log = LoggerFactory.getLogger(ProjectionTest.class);
+
+//    @Test
+//    public void 하나의_projection_구문테스트0() {
+//        String ra = "(R)";
+//        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+//        CommonTokenStream tokens = new CommonTokenStream(lexer);
+//        RaParser parser = new RaParser(tokens);
+//        ParseTree tree = parser.expr();
+//        log.info(tree.toStringTree(parser));
+//        RaInterpreter interpreter = new RaInterpreter();
+//        String query = (String) interpreter.visit(tree);
+//        assertEquals("SELECT * FROM R", query);
+//    }
 
     @Test
     public void 하나의_projection_구문테스트() {
@@ -65,5 +77,19 @@ public class ProjectionTest {
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
         assertEquals("SELECT R.a,R.b FROM R WHERE R.a>0", query);
+    }
+
+    // 다른 예제
+    @Test
+    public void projectionCustomer_테스트() {
+        String ra = "π CustomerName, Status (Customers)";
+        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        RaParser parser = new RaParser(tokens);
+        ParseTree tree = parser.expr();
+        log.info(tree.toStringTree(parser));
+        RaInterpreter interpreter = new RaInterpreter();
+        Object query = interpreter.visit(tree);
+        assertEquals("SELECT CustomerName,Status FROM Customers", query);
     }
 }

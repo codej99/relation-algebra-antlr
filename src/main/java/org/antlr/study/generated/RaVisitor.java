@@ -17,11 +17,47 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpr(RaParser.ExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RaParser#projection}.
+	 * Visit a parse tree produced by {@link RaParser#intersection}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitProjection(RaParser.ProjectionContext ctx);
+	T visitIntersection(RaParser.IntersectionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#union}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnion(RaParser.UnionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#setDifference}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSetDifference(RaParser.SetDifferenceContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#naturalJoin}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNaturalJoin(RaParser.NaturalJoinContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#leftJoin}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLeftJoin(RaParser.LeftJoinContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#rightJoin}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRightJoin(RaParser.RightJoinContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#catesianProduct}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCatesianProduct(RaParser.CatesianProductContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RaParser#selection}.
 	 * @param ctx the parse tree
@@ -29,17 +65,11 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSelection(RaParser.SelectionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RaParser#naturaljoin}.
+	 * Visit a parse tree produced by {@link RaParser#projection}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNaturaljoin(RaParser.NaturaljoinContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RaParser#crossjoin}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCrossjoin(RaParser.CrossjoinContext ctx);
+	T visitProjection(RaParser.ProjectionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RaParser#rename}.
 	 * @param ctx the parse tree

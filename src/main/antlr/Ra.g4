@@ -1,31 +1,40 @@
 grammar Ra;
 
 expr :
-    projection
-    | selection
-    | naturaljoin
+    naturaljoin
     | crossjoin
+    | selection
+    | projection
+    | rename
+    | relation
 ;
 
 projection :
-    PROJECTION attributes rename? orderby? '('relation')'
+    PROJECTION attributes '('expr')'
+    | PROJECTION attributes expr
 ;
 
 selection :
-    SELECTION conditions rename? '('relation')'
+    SELECTION conditions '('expr')'
 ;
 
 naturaljoin :
-    orderby? '('relation')' NATURAL_JOIN orderby? '('relation')'
+    '('expr')' NATURAL_JOIN '('expr')'
 ;
 
 crossjoin :
-    orderby? '('relation')' (CARTESIAN orderby? '('relation')')+
+    '('expr')' (CARTESIAN '('expr')')+
+;
+
+rename :
+    RENAME STRING '('expr')'
+    | RENAME renameAttr (',' renameAttr)+ '('expr')'
+    | RENAME renameAttr (',' renameAttr)+ '('expr')'
 ;
 
 relation :
-    STRING #simpleRelation
-    | expr #nestedRelation
+    '('expr')' #nestedRelation
+    | STRING #simpleRelation
 ;
 
 orderby :
@@ -59,20 +68,16 @@ fullvalue :
     STRING '.' STRING
 ;
 
-rename :
-    RENAME STRING
-    | RENAME renameAttr (',' renameAttr)+
-;
-
 renameAttr :
-    STRING RENAME_ATTR attribute
+    STRING
+    | STRING RENAME_ATTR attribute
 ;
 
 conditions :
     condition
     | condition logicalOps conditions
 //    | logicalOps conditions
-    | '(' conditions ')'
+    | '('conditions')'
 ;
 
 condition :
@@ -104,7 +109,6 @@ CARTESIAN : '⨯';
 NATURAL_JOIN : '⨝';
 LEFT_JOIN : '⟕';
 RIGHT_JOIN : '⟖';
-
 ORDER_BY: 'τ';
 GROUP_BY: 'γ';
 
@@ -150,9 +154,6 @@ WS
 	[ \t\r\n]+ -> skip
 ;
 
-//ANY_SPACE: SINGLE_SPACE+;
-//
-//SINGLE_SPACE: ' ';
 //fragments defined to make the input case-insensitive
 fragment A : [aA]; // match either an 'a' or 'A'
 fragment B : [bB];

@@ -76,13 +76,13 @@ public class RaBaseListener implements RaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSimpleRelation(RaParser.SimpleRelationContext ctx) { }
+	@Override public void enterRename(RaParser.RenameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSimpleRelation(RaParser.SimpleRelationContext ctx) { }
+	@Override public void exitRename(RaParser.RenameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -95,6 +95,18 @@ public class RaBaseListener implements RaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNestedRelation(RaParser.NestedRelationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSimpleRelation(RaParser.SimpleRelationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSimpleRelation(RaParser.SimpleRelationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -179,18 +191,6 @@ public class RaBaseListener implements RaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFullvalue(RaParser.FullvalueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRename(RaParser.RenameContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRename(RaParser.RenameContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

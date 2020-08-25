@@ -25,16 +25,16 @@ public class RaParser extends Parser {
 		AND=31, OR=32, NOT=33, ASC=34, DESC=35, WS=36;
 	public static final int
 		RULE_expr = 0, RULE_projection = 1, RULE_selection = 2, RULE_naturaljoin = 3, 
-		RULE_crossjoin = 4, RULE_relation = 5, RULE_orderby = 6, RULE_orders = 7, 
-		RULE_order = 8, RULE_direction = 9, RULE_attributes = 10, RULE_attribute = 11, 
-		RULE_fullvalue = 12, RULE_rename = 13, RULE_renameAttr = 14, RULE_conditions = 15, 
+		RULE_crossjoin = 4, RULE_rename = 5, RULE_relation = 6, RULE_orderby = 7, 
+		RULE_orders = 8, RULE_order = 9, RULE_direction = 10, RULE_attributes = 11, 
+		RULE_attribute = 12, RULE_fullvalue = 13, RULE_renameAttr = 14, RULE_conditions = 15, 
 		RULE_condition = 16, RULE_logicalOps = 17, RULE_compared = 18, RULE_comp = 19, 
 		RULE_data = 20;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"expr", "projection", "selection", "naturaljoin", "crossjoin", "relation", 
-			"orderby", "orders", "order", "direction", "attributes", "attribute", 
-			"fullvalue", "rename", "renameAttr", "conditions", "condition", "logicalOps", 
+			"expr", "projection", "selection", "naturaljoin", "crossjoin", "rename", 
+			"relation", "orderby", "orders", "order", "direction", "attributes", 
+			"attribute", "fullvalue", "renameAttr", "conditions", "condition", "logicalOps", 
 			"compared", "comp", "data"
 		};
 	}
@@ -110,17 +110,23 @@ public class RaParser extends Parser {
 	}
 
 	public static class ExprContext extends ParserRuleContext {
-		public ProjectionContext projection() {
-			return getRuleContext(ProjectionContext.class,0);
-		}
-		public SelectionContext selection() {
-			return getRuleContext(SelectionContext.class,0);
-		}
 		public NaturaljoinContext naturaljoin() {
 			return getRuleContext(NaturaljoinContext.class,0);
 		}
 		public CrossjoinContext crossjoin() {
 			return getRuleContext(CrossjoinContext.class,0);
+		}
+		public SelectionContext selection() {
+			return getRuleContext(SelectionContext.class,0);
+		}
+		public ProjectionContext projection() {
+			return getRuleContext(ProjectionContext.class,0);
+		}
+		public RenameContext rename() {
+			return getRuleContext(RenameContext.class,0);
+		}
+		public RelationContext relation() {
+			return getRuleContext(RelationContext.class,0);
 		}
 		public ExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -145,35 +151,49 @@ public class RaParser extends Parser {
 		ExprContext _localctx = new ExprContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_expr);
 		try {
-			setState(46);
+			setState(48);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(42);
-				projection();
+				naturaljoin();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(43);
-				selection();
+				crossjoin();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(44);
-				naturaljoin();
+				selection();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(45);
-				crossjoin();
+				projection();
+				}
+				break;
+			case 5:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(46);
+				rename();
+				}
+				break;
+			case 6:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(47);
+				relation();
 				}
 				break;
 			}
@@ -194,14 +214,8 @@ public class RaParser extends Parser {
 		public AttributesContext attributes() {
 			return getRuleContext(AttributesContext.class,0);
 		}
-		public RelationContext relation() {
-			return getRuleContext(RelationContext.class,0);
-		}
-		public RenameContext rename() {
-			return getRuleContext(RenameContext.class,0);
-		}
-		public OrderbyContext orderby() {
-			return getRuleContext(OrderbyContext.class,0);
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public ProjectionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -225,40 +239,36 @@ public class RaParser extends Parser {
 	public final ProjectionContext projection() throws RecognitionException {
 		ProjectionContext _localctx = new ProjectionContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_projection);
-		int _la;
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(48);
-			match(PROJECTION);
-			setState(49);
-			attributes();
-			setState(51);
+			setState(60);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==RENAME) {
+			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
 				{
 				setState(50);
-				rename();
-				}
-			}
-
-			setState(54);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==ORDER_BY) {
-				{
+				match(PROJECTION);
+				setState(51);
+				attributes();
+				setState(52);
+				match(T__0);
 				setState(53);
-				orderby();
+				expr();
+				setState(54);
+				match(T__1);
 				}
-			}
-
-			setState(56);
-			match(T__0);
-			setState(57);
-			relation();
-			setState(58);
-			match(T__1);
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(56);
+				match(PROJECTION);
+				setState(57);
+				attributes();
+				setState(58);
+				expr();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -277,11 +287,8 @@ public class RaParser extends Parser {
 		public ConditionsContext conditions() {
 			return getRuleContext(ConditionsContext.class,0);
 		}
-		public RelationContext relation() {
-			return getRuleContext(RelationContext.class,0);
-		}
-		public RenameContext rename() {
-			return getRuleContext(RenameContext.class,0);
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
 		}
 		public SelectionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -305,29 +312,18 @@ public class RaParser extends Parser {
 	public final SelectionContext selection() throws RecognitionException {
 		SelectionContext _localctx = new SelectionContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_selection);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(60);
+			setState(62);
 			match(SELECTION);
-			setState(61);
-			conditions();
 			setState(63);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==RENAME) {
-				{
-				setState(62);
-				rename();
-				}
-			}
-
-			setState(65);
+			conditions();
+			setState(64);
 			match(T__0);
+			setState(65);
+			expr();
 			setState(66);
-			relation();
-			setState(67);
 			match(T__1);
 			}
 		}
@@ -343,19 +339,13 @@ public class RaParser extends Parser {
 	}
 
 	public static class NaturaljoinContext extends ParserRuleContext {
-		public List<RelationContext> relation() {
-			return getRuleContexts(RelationContext.class);
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
 		}
-		public RelationContext relation(int i) {
-			return getRuleContext(RelationContext.class,i);
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
 		}
 		public TerminalNode NATURAL_JOIN() { return getToken(RaParser.NATURAL_JOIN, 0); }
-		public List<OrderbyContext> orderby() {
-			return getRuleContexts(OrderbyContext.class);
-		}
-		public OrderbyContext orderby(int i) {
-			return getRuleContext(OrderbyContext.class,i);
-		}
 		public NaturaljoinContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -378,43 +368,22 @@ public class RaParser extends Parser {
 	public final NaturaljoinContext naturaljoin() throws RecognitionException {
 		NaturaljoinContext _localctx = new NaturaljoinContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_naturaljoin);
-		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
+			setState(68);
+			match(T__0);
+			setState(69);
+			expr();
 			setState(70);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==ORDER_BY) {
-				{
-				setState(69);
-				orderby();
-				}
-			}
-
+			match(T__1);
+			setState(71);
+			match(NATURAL_JOIN);
 			setState(72);
 			match(T__0);
 			setState(73);
-			relation();
+			expr();
 			setState(74);
-			match(T__1);
-			setState(75);
-			match(NATURAL_JOIN);
-			setState(77);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==ORDER_BY) {
-				{
-				setState(76);
-				orderby();
-				}
-			}
-
-			setState(79);
-			match(T__0);
-			setState(80);
-			relation();
-			setState(81);
 			match(T__1);
 			}
 		}
@@ -430,17 +399,11 @@ public class RaParser extends Parser {
 	}
 
 	public static class CrossjoinContext extends ParserRuleContext {
-		public List<RelationContext> relation() {
-			return getRuleContexts(RelationContext.class);
+		public List<ExprContext> expr() {
+			return getRuleContexts(ExprContext.class);
 		}
-		public RelationContext relation(int i) {
-			return getRuleContext(RelationContext.class,i);
-		}
-		public List<OrderbyContext> orderby() {
-			return getRuleContexts(OrderbyContext.class);
-		}
-		public OrderbyContext orderby(int i) {
-			return getRuleContext(OrderbyContext.class,i);
+		public ExprContext expr(int i) {
+			return getRuleContext(ExprContext.class,i);
 		}
 		public List<TerminalNode> CARTESIAN() { return getTokens(RaParser.CARTESIAN); }
 		public TerminalNode CARTESIAN(int i) {
@@ -472,52 +435,161 @@ public class RaParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==ORDER_BY) {
-				{
-				setState(83);
-				orderby();
-				}
-			}
-
-			setState(86);
+			setState(76);
 			match(T__0);
-			setState(87);
-			relation();
-			setState(88);
+			setState(77);
+			expr();
+			setState(78);
 			match(T__1);
-			setState(97); 
+			setState(84); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
 				{
-				setState(89);
+				setState(79);
 				match(CARTESIAN);
-				setState(91);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if (_la==ORDER_BY) {
-					{
-					setState(90);
-					orderby();
-					}
-				}
-
-				setState(93);
+				setState(80);
 				match(T__0);
-				setState(94);
-				relation();
-				setState(95);
+				setState(81);
+				expr();
+				setState(82);
 				match(T__1);
 				}
 				}
-				setState(99); 
+				setState(86); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			} while ( _la==CARTESIAN );
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class RenameContext extends ParserRuleContext {
+		public TerminalNode RENAME() { return getToken(RaParser.RENAME, 0); }
+		public TerminalNode STRING() { return getToken(RaParser.STRING, 0); }
+		public ExprContext expr() {
+			return getRuleContext(ExprContext.class,0);
+		}
+		public List<RenameAttrContext> renameAttr() {
+			return getRuleContexts(RenameAttrContext.class);
+		}
+		public RenameAttrContext renameAttr(int i) {
+			return getRuleContext(RenameAttrContext.class,i);
+		}
+		public RenameContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_rename; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof RaListener ) ((RaListener)listener).enterRename(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof RaListener ) ((RaListener)listener).exitRename(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof RaVisitor ) return ((RaVisitor<? extends T>)visitor).visitRename(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final RenameContext rename() throws RecognitionException {
+		RenameContext _localctx = new RenameContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_rename);
+		int _la;
+		try {
+			setState(118);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(88);
+				match(RENAME);
+				setState(89);
+				match(STRING);
+				setState(90);
+				match(T__0);
+				setState(91);
+				expr();
+				setState(92);
+				match(T__1);
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(94);
+				match(RENAME);
+				setState(95);
+				renameAttr();
+				setState(98); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				do {
+					{
+					{
+					setState(96);
+					match(T__2);
+					setState(97);
+					renameAttr();
+					}
+					}
+					setState(100); 
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				} while ( _la==T__2 );
+				setState(102);
+				match(T__0);
+				setState(103);
+				expr();
+				setState(104);
+				match(T__1);
+				}
+				break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(106);
+				match(RENAME);
+				setState(107);
+				renameAttr();
+				setState(110); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				do {
+					{
+					{
+					setState(108);
+					match(T__2);
+					setState(109);
+					renameAttr();
+					}
+					}
+					setState(112); 
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				} while ( _la==T__2 );
+				setState(114);
+				match(T__0);
+				setState(115);
+				expr();
+				setState(116);
+				match(T__1);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -581,28 +653,29 @@ public class RaParser extends Parser {
 
 	public final RelationContext relation() throws RecognitionException {
 		RelationContext _localctx = new RelationContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_relation);
+		enterRule(_localctx, 12, RULE_relation);
 		try {
-			setState(103);
+			setState(125);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case STRING:
-				_localctx = new SimpleRelationContext(_localctx);
+			case T__0:
+				_localctx = new NestedRelationContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(101);
-				match(STRING);
+				setState(120);
+				match(T__0);
+				setState(121);
+				expr();
+				setState(122);
+				match(T__1);
 				}
 				break;
-			case T__0:
-			case PROJECTION:
-			case SELECTION:
-			case ORDER_BY:
-				_localctx = new NestedRelationContext(_localctx);
+			case STRING:
+				_localctx = new SimpleRelationContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(102);
-				expr();
+				setState(124);
+				match(STRING);
 				}
 				break;
 			default:
@@ -646,13 +719,13 @@ public class RaParser extends Parser {
 
 	public final OrderbyContext orderby() throws RecognitionException {
 		OrderbyContext _localctx = new OrderbyContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_orderby);
+		enterRule(_localctx, 14, RULE_orderby);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(105);
+			setState(127);
 			match(ORDER_BY);
-			setState(106);
+			setState(128);
 			orders();
 			}
 		}
@@ -695,30 +768,30 @@ public class RaParser extends Parser {
 
 	public final OrdersContext orders() throws RecognitionException {
 		OrdersContext _localctx = new OrdersContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_orders);
+		enterRule(_localctx, 16, RULE_orders);
 		int _la;
 		try {
-			setState(116);
+			setState(138);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(108);
+				setState(130);
 				order();
-				setState(111); 
+				setState(133); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(109);
+					setState(131);
 					match(T__2);
-					setState(110);
+					setState(132);
 					order();
 					}
 					}
-					setState(113); 
+					setState(135); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==T__2 );
@@ -727,7 +800,7 @@ public class RaParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(115);
+				setState(137);
 				order();
 				}
 				break;
@@ -772,13 +845,13 @@ public class RaParser extends Parser {
 
 	public final OrderContext order() throws RecognitionException {
 		OrderContext _localctx = new OrderContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_order);
+		enterRule(_localctx, 18, RULE_order);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(118);
+			setState(140);
 			attribute();
-			setState(119);
+			setState(141);
 			direction();
 			}
 		}
@@ -815,12 +888,12 @@ public class RaParser extends Parser {
 
 	public final DirectionContext direction() throws RecognitionException {
 		DirectionContext _localctx = new DirectionContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_direction);
+		enterRule(_localctx, 20, RULE_direction);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(121);
+			setState(143);
 			_la = _input.LA(1);
 			if ( !(_la==T__3 || _la==T__4) ) {
 			_errHandler.recoverInline(this);
@@ -871,37 +944,37 @@ public class RaParser extends Parser {
 
 	public final AttributesContext attributes() throws RecognitionException {
 		AttributesContext _localctx = new AttributesContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_attributes);
+		enterRule(_localctx, 22, RULE_attributes);
 		int _la;
 		try {
-			setState(131);
+			setState(153);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(123);
+				setState(145);
 				attribute();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(124);
+				setState(146);
 				attribute();
-				setState(127); 
+				setState(149); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				do {
 					{
 					{
-					setState(125);
+					setState(147);
 					match(T__2);
-					setState(126);
+					setState(148);
 					attribute();
 					}
 					}
-					setState(129); 
+					setState(151); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				} while ( _la==T__2 );
@@ -946,22 +1019,22 @@ public class RaParser extends Parser {
 
 	public final AttributeContext attribute() throws RecognitionException {
 		AttributeContext _localctx = new AttributeContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_attribute);
+		enterRule(_localctx, 24, RULE_attribute);
 		try {
-			setState(135);
+			setState(157);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(133);
+				setState(155);
 				match(STRING);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(134);
+				setState(156);
 				fullvalue();
 				}
 				break;
@@ -1004,99 +1077,16 @@ public class RaParser extends Parser {
 
 	public final FullvalueContext fullvalue() throws RecognitionException {
 		FullvalueContext _localctx = new FullvalueContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_fullvalue);
+		enterRule(_localctx, 26, RULE_fullvalue);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(137);
+			setState(159);
 			match(STRING);
-			setState(138);
+			setState(160);
 			match(T__5);
-			setState(139);
+			setState(161);
 			match(STRING);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class RenameContext extends ParserRuleContext {
-		public TerminalNode RENAME() { return getToken(RaParser.RENAME, 0); }
-		public TerminalNode STRING() { return getToken(RaParser.STRING, 0); }
-		public List<RenameAttrContext> renameAttr() {
-			return getRuleContexts(RenameAttrContext.class);
-		}
-		public RenameAttrContext renameAttr(int i) {
-			return getRuleContext(RenameAttrContext.class,i);
-		}
-		public RenameContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_rename; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof RaListener ) ((RaListener)listener).enterRename(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof RaListener ) ((RaListener)listener).exitRename(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof RaVisitor ) return ((RaVisitor<? extends T>)visitor).visitRename(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final RenameContext rename() throws RecognitionException {
-		RenameContext _localctx = new RenameContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_rename);
-		int _la;
-		try {
-			setState(151);
-			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
-			case 1:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(141);
-				match(RENAME);
-				setState(142);
-				match(STRING);
-				}
-				break;
-			case 2:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(143);
-				match(RENAME);
-				setState(144);
-				renameAttr();
-				setState(147); 
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				do {
-					{
-					{
-					setState(145);
-					match(T__2);
-					setState(146);
-					renameAttr();
-					}
-					}
-					setState(149); 
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				} while ( _la==T__2 );
-				}
-				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1139,14 +1129,27 @@ public class RaParser extends Parser {
 		RenameAttrContext _localctx = new RenameAttrContext(_ctx, getState());
 		enterRule(_localctx, 28, RULE_renameAttr);
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(153);
-			match(STRING);
-			setState(154);
-			match(RENAME_ATTR);
-			setState(155);
-			attribute();
+			setState(167);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(163);
+				match(STRING);
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(164);
+				match(STRING);
+				setState(165);
+				match(RENAME_ATTR);
+				setState(166);
+				attribute();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1193,35 +1196,35 @@ public class RaParser extends Parser {
 		ConditionsContext _localctx = new ConditionsContext(_ctx, getState());
 		enterRule(_localctx, 30, RULE_conditions);
 		try {
-			setState(166);
+			setState(178);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,17,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(157);
+				setState(169);
 				condition();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(158);
+				setState(170);
 				condition();
-				setState(159);
+				setState(171);
 				logicalOps();
-				setState(160);
+				setState(172);
 				conditions();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(162);
+				setState(174);
 				match(T__0);
-				setState(163);
+				setState(175);
 				conditions();
-				setState(164);
+				setState(176);
 				match(T__1);
 				}
 				break;
@@ -1273,11 +1276,11 @@ public class RaParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(168);
+			setState(180);
 			compared();
-			setState(169);
+			setState(181);
 			comp();
-			setState(170);
+			setState(182);
 			compared();
 			}
 		}
@@ -1319,7 +1322,7 @@ public class RaParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(172);
+			setState(184);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__6) | (1L << T__7) | (1L << T__8))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1372,20 +1375,20 @@ public class RaParser extends Parser {
 		ComparedContext _localctx = new ComparedContext(_ctx, getState());
 		enterRule(_localctx, 36, RULE_compared);
 		try {
-			setState(176);
+			setState(188);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(174);
+				setState(186);
 				attribute();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(175);
+				setState(187);
 				data();
 				}
 				break;
@@ -1435,7 +1438,7 @@ public class RaParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(178);
+			setState(190);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NOT_EQUAL) | (1L << EQUAL) | (1L << GREATER_EQUAL) | (1L << GREATER) | (1L << LESSER_EQUAL) | (1L << LESSER))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1487,7 +1490,7 @@ public class RaParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(180);
+			setState(192);
 			_la = _input.LA(1);
 			if ( !(_la==STRING || _la==NUMBER) ) {
 			_errHandler.recoverInline(this);
@@ -1511,60 +1514,64 @@ public class RaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3&\u00b9\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3&\u00c5\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\3\2\3\2\3\2\3\2\5\2\61\n\2\3"+
-		"\3\3\3\3\3\5\3\66\n\3\3\3\5\39\n\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\5\4B\n"+
-		"\4\3\4\3\4\3\4\3\4\3\5\5\5I\n\5\3\5\3\5\3\5\3\5\3\5\5\5P\n\5\3\5\3\5\3"+
-		"\5\3\5\3\6\5\6W\n\6\3\6\3\6\3\6\3\6\3\6\5\6^\n\6\3\6\3\6\3\6\3\6\6\6d"+
-		"\n\6\r\6\16\6e\3\7\3\7\5\7j\n\7\3\b\3\b\3\b\3\t\3\t\3\t\6\tr\n\t\r\t\16"+
-		"\ts\3\t\5\tw\n\t\3\n\3\n\3\n\3\13\3\13\3\f\3\f\3\f\3\f\6\f\u0082\n\f\r"+
-		"\f\16\f\u0083\5\f\u0086\n\f\3\r\3\r\5\r\u008a\n\r\3\16\3\16\3\16\3\16"+
-		"\3\17\3\17\3\17\3\17\3\17\3\17\6\17\u0096\n\17\r\17\16\17\u0097\5\17\u009a"+
-		"\n\17\3\20\3\20\3\20\3\20\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21"+
-		"\5\21\u00a9\n\21\3\22\3\22\3\22\3\22\3\23\3\23\3\24\3\24\5\24\u00b3\n"+
-		"\24\3\25\3\25\3\26\3\26\3\26\2\2\27\2\4\6\b\n\f\16\20\22\24\26\30\32\34"+
-		"\36 \"$&(*\2\6\3\2\6\7\3\2\t\13\3\2\32\37\3\2\30\31\2\u00b9\2\60\3\2\2"+
-		"\2\4\62\3\2\2\2\6>\3\2\2\2\bH\3\2\2\2\nV\3\2\2\2\fi\3\2\2\2\16k\3\2\2"+
-		"\2\20v\3\2\2\2\22x\3\2\2\2\24{\3\2\2\2\26\u0085\3\2\2\2\30\u0089\3\2\2"+
-		"\2\32\u008b\3\2\2\2\34\u0099\3\2\2\2\36\u009b\3\2\2\2 \u00a8\3\2\2\2\""+
-		"\u00aa\3\2\2\2$\u00ae\3\2\2\2&\u00b2\3\2\2\2(\u00b4\3\2\2\2*\u00b6\3\2"+
-		"\2\2,\61\5\4\3\2-\61\5\6\4\2.\61\5\b\5\2/\61\5\n\6\2\60,\3\2\2\2\60-\3"+
-		"\2\2\2\60.\3\2\2\2\60/\3\2\2\2\61\3\3\2\2\2\62\63\7\f\2\2\63\65\5\26\f"+
-		"\2\64\66\5\34\17\2\65\64\3\2\2\2\65\66\3\2\2\2\668\3\2\2\2\679\5\16\b"+
-		"\28\67\3\2\2\289\3\2\2\29:\3\2\2\2:;\7\3\2\2;<\5\f\7\2<=\7\4\2\2=\5\3"+
-		"\2\2\2>?\7\r\2\2?A\5 \21\2@B\5\34\17\2A@\3\2\2\2AB\3\2\2\2BC\3\2\2\2C"+
-		"D\7\3\2\2DE\5\f\7\2EF\7\4\2\2F\7\3\2\2\2GI\5\16\b\2HG\3\2\2\2HI\3\2\2"+
-		"\2IJ\3\2\2\2JK\7\3\2\2KL\5\f\7\2LM\7\4\2\2MO\7\21\2\2NP\5\16\b\2ON\3\2"+
-		"\2\2OP\3\2\2\2PQ\3\2\2\2QR\7\3\2\2RS\5\f\7\2ST\7\4\2\2T\t\3\2\2\2UW\5"+
-		"\16\b\2VU\3\2\2\2VW\3\2\2\2WX\3\2\2\2XY\7\3\2\2YZ\5\f\7\2Zc\7\4\2\2[]"+
-		"\7\20\2\2\\^\5\16\b\2]\\\3\2\2\2]^\3\2\2\2^_\3\2\2\2_`\7\3\2\2`a\5\f\7"+
-		"\2ab\7\4\2\2bd\3\2\2\2c[\3\2\2\2de\3\2\2\2ec\3\2\2\2ef\3\2\2\2f\13\3\2"+
-		"\2\2gj\7\30\2\2hj\5\2\2\2ig\3\2\2\2ih\3\2\2\2j\r\3\2\2\2kl\7\24\2\2lm"+
-		"\5\20\t\2m\17\3\2\2\2nq\5\22\n\2op\7\5\2\2pr\5\22\n\2qo\3\2\2\2rs\3\2"+
-		"\2\2sq\3\2\2\2st\3\2\2\2tw\3\2\2\2uw\5\22\n\2vn\3\2\2\2vu\3\2\2\2w\21"+
-		"\3\2\2\2xy\5\30\r\2yz\5\24\13\2z\23\3\2\2\2{|\t\2\2\2|\25\3\2\2\2}\u0086"+
-		"\5\30\r\2~\u0081\5\30\r\2\177\u0080\7\5\2\2\u0080\u0082\5\30\r\2\u0081"+
-		"\177\3\2\2\2\u0082\u0083\3\2\2\2\u0083\u0081\3\2\2\2\u0083\u0084\3\2\2"+
-		"\2\u0084\u0086\3\2\2\2\u0085}\3\2\2\2\u0085~\3\2\2\2\u0086\27\3\2\2\2"+
-		"\u0087\u008a\7\30\2\2\u0088\u008a\5\32\16\2\u0089\u0087\3\2\2\2\u0089"+
-		"\u0088\3\2\2\2\u008a\31\3\2\2\2\u008b\u008c\7\30\2\2\u008c\u008d\7\b\2"+
-		"\2\u008d\u008e\7\30\2\2\u008e\33\3\2\2\2\u008f\u0090\7\16\2\2\u0090\u009a"+
-		"\7\30\2\2\u0091\u0092\7\16\2\2\u0092\u0095\5\36\20\2\u0093\u0094\7\5\2"+
-		"\2\u0094\u0096\5\36\20\2\u0095\u0093\3\2\2\2\u0096\u0097\3\2\2\2\u0097"+
-		"\u0095\3\2\2\2\u0097\u0098\3\2\2\2\u0098\u009a\3\2\2\2\u0099\u008f\3\2"+
-		"\2\2\u0099\u0091\3\2\2\2\u009a\35\3\2\2\2\u009b\u009c\7\30\2\2\u009c\u009d"+
-		"\7\17\2\2\u009d\u009e\5\30\r\2\u009e\37\3\2\2\2\u009f\u00a9\5\"\22\2\u00a0"+
-		"\u00a1\5\"\22\2\u00a1\u00a2\5$\23\2\u00a2\u00a3\5 \21\2\u00a3\u00a9\3"+
-		"\2\2\2\u00a4\u00a5\7\3\2\2\u00a5\u00a6\5 \21\2\u00a6\u00a7\7\4\2\2\u00a7"+
-		"\u00a9\3\2\2\2\u00a8\u009f\3\2\2\2\u00a8\u00a0\3\2\2\2\u00a8\u00a4\3\2"+
-		"\2\2\u00a9!\3\2\2\2\u00aa\u00ab\5&\24\2\u00ab\u00ac\5(\25\2\u00ac\u00ad"+
-		"\5&\24\2\u00ad#\3\2\2\2\u00ae\u00af\t\3\2\2\u00af%\3\2\2\2\u00b0\u00b3"+
-		"\5\30\r\2\u00b1\u00b3\5*\26\2\u00b2\u00b0\3\2\2\2\u00b2\u00b1\3\2\2\2"+
-		"\u00b3\'\3\2\2\2\u00b4\u00b5\t\4\2\2\u00b5)\3\2\2\2\u00b6\u00b7\t\5\2"+
-		"\2\u00b7+\3\2\2\2\25\60\658AHOV]eisv\u0083\u0085\u0089\u0097\u0099\u00a8"+
-		"\u00b2";
+		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\3\2\3\2\3\2\3\2\3\2\3\2\5\2\63"+
+		"\n\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3?\n\3\3\4\3\4\3\4\3\4"+
+		"\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3"+
+		"\6\6\6W\n\6\r\6\16\6X\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\6\7e\n\7"+
+		"\r\7\16\7f\3\7\3\7\3\7\3\7\3\7\3\7\3\7\3\7\6\7q\n\7\r\7\16\7r\3\7\3\7"+
+		"\3\7\3\7\5\7y\n\7\3\b\3\b\3\b\3\b\3\b\5\b\u0080\n\b\3\t\3\t\3\t\3\n\3"+
+		"\n\3\n\6\n\u0088\n\n\r\n\16\n\u0089\3\n\5\n\u008d\n\n\3\13\3\13\3\13\3"+
+		"\f\3\f\3\r\3\r\3\r\3\r\6\r\u0098\n\r\r\r\16\r\u0099\5\r\u009c\n\r\3\16"+
+		"\3\16\5\16\u00a0\n\16\3\17\3\17\3\17\3\17\3\20\3\20\3\20\3\20\5\20\u00aa"+
+		"\n\20\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\3\21\5\21\u00b5\n\21\3\22"+
+		"\3\22\3\22\3\22\3\23\3\23\3\24\3\24\5\24\u00bf\n\24\3\25\3\25\3\26\3\26"+
+		"\3\26\2\2\27\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*\2\6\3\2\6\7"+
+		"\3\2\t\13\3\2\32\37\3\2\30\31\2\u00c4\2\62\3\2\2\2\4>\3\2\2\2\6@\3\2\2"+
+		"\2\bF\3\2\2\2\nN\3\2\2\2\fx\3\2\2\2\16\177\3\2\2\2\20\u0081\3\2\2\2\22"+
+		"\u008c\3\2\2\2\24\u008e\3\2\2\2\26\u0091\3\2\2\2\30\u009b\3\2\2\2\32\u009f"+
+		"\3\2\2\2\34\u00a1\3\2\2\2\36\u00a9\3\2\2\2 \u00b4\3\2\2\2\"\u00b6\3\2"+
+		"\2\2$\u00ba\3\2\2\2&\u00be\3\2\2\2(\u00c0\3\2\2\2*\u00c2\3\2\2\2,\63\5"+
+		"\b\5\2-\63\5\n\6\2.\63\5\6\4\2/\63\5\4\3\2\60\63\5\f\7\2\61\63\5\16\b"+
+		"\2\62,\3\2\2\2\62-\3\2\2\2\62.\3\2\2\2\62/\3\2\2\2\62\60\3\2\2\2\62\61"+
+		"\3\2\2\2\63\3\3\2\2\2\64\65\7\f\2\2\65\66\5\30\r\2\66\67\7\3\2\2\678\5"+
+		"\2\2\289\7\4\2\29?\3\2\2\2:;\7\f\2\2;<\5\30\r\2<=\5\2\2\2=?\3\2\2\2>\64"+
+		"\3\2\2\2>:\3\2\2\2?\5\3\2\2\2@A\7\r\2\2AB\5 \21\2BC\7\3\2\2CD\5\2\2\2"+
+		"DE\7\4\2\2E\7\3\2\2\2FG\7\3\2\2GH\5\2\2\2HI\7\4\2\2IJ\7\21\2\2JK\7\3\2"+
+		"\2KL\5\2\2\2LM\7\4\2\2M\t\3\2\2\2NO\7\3\2\2OP\5\2\2\2PV\7\4\2\2QR\7\20"+
+		"\2\2RS\7\3\2\2ST\5\2\2\2TU\7\4\2\2UW\3\2\2\2VQ\3\2\2\2WX\3\2\2\2XV\3\2"+
+		"\2\2XY\3\2\2\2Y\13\3\2\2\2Z[\7\16\2\2[\\\7\30\2\2\\]\7\3\2\2]^\5\2\2\2"+
+		"^_\7\4\2\2_y\3\2\2\2`a\7\16\2\2ad\5\36\20\2bc\7\5\2\2ce\5\36\20\2db\3"+
+		"\2\2\2ef\3\2\2\2fd\3\2\2\2fg\3\2\2\2gh\3\2\2\2hi\7\3\2\2ij\5\2\2\2jk\7"+
+		"\4\2\2ky\3\2\2\2lm\7\16\2\2mp\5\36\20\2no\7\5\2\2oq\5\36\20\2pn\3\2\2"+
+		"\2qr\3\2\2\2rp\3\2\2\2rs\3\2\2\2st\3\2\2\2tu\7\3\2\2uv\5\2\2\2vw\7\4\2"+
+		"\2wy\3\2\2\2xZ\3\2\2\2x`\3\2\2\2xl\3\2\2\2y\r\3\2\2\2z{\7\3\2\2{|\5\2"+
+		"\2\2|}\7\4\2\2}\u0080\3\2\2\2~\u0080\7\30\2\2\177z\3\2\2\2\177~\3\2\2"+
+		"\2\u0080\17\3\2\2\2\u0081\u0082\7\24\2\2\u0082\u0083\5\22\n\2\u0083\21"+
+		"\3\2\2\2\u0084\u0087\5\24\13\2\u0085\u0086\7\5\2\2\u0086\u0088\5\24\13"+
+		"\2\u0087\u0085\3\2\2\2\u0088\u0089\3\2\2\2\u0089\u0087\3\2\2\2\u0089\u008a"+
+		"\3\2\2\2\u008a\u008d\3\2\2\2\u008b\u008d\5\24\13\2\u008c\u0084\3\2\2\2"+
+		"\u008c\u008b\3\2\2\2\u008d\23\3\2\2\2\u008e\u008f\5\32\16\2\u008f\u0090"+
+		"\5\26\f\2\u0090\25\3\2\2\2\u0091\u0092\t\2\2\2\u0092\27\3\2\2\2\u0093"+
+		"\u009c\5\32\16\2\u0094\u0097\5\32\16\2\u0095\u0096\7\5\2\2\u0096\u0098"+
+		"\5\32\16\2\u0097\u0095\3\2\2\2\u0098\u0099\3\2\2\2\u0099\u0097\3\2\2\2"+
+		"\u0099\u009a\3\2\2\2\u009a\u009c\3\2\2\2\u009b\u0093\3\2\2\2\u009b\u0094"+
+		"\3\2\2\2\u009c\31\3\2\2\2\u009d\u00a0\7\30\2\2\u009e\u00a0\5\34\17\2\u009f"+
+		"\u009d\3\2\2\2\u009f\u009e\3\2\2\2\u00a0\33\3\2\2\2\u00a1\u00a2\7\30\2"+
+		"\2\u00a2\u00a3\7\b\2\2\u00a3\u00a4\7\30\2\2\u00a4\35\3\2\2\2\u00a5\u00aa"+
+		"\7\30\2\2\u00a6\u00a7\7\30\2\2\u00a7\u00a8\7\17\2\2\u00a8\u00aa\5\32\16"+
+		"\2\u00a9\u00a5\3\2\2\2\u00a9\u00a6\3\2\2\2\u00aa\37\3\2\2\2\u00ab\u00b5"+
+		"\5\"\22\2\u00ac\u00ad\5\"\22\2\u00ad\u00ae\5$\23\2\u00ae\u00af\5 \21\2"+
+		"\u00af\u00b5\3\2\2\2\u00b0\u00b1\7\3\2\2\u00b1\u00b2\5 \21\2\u00b2\u00b3"+
+		"\7\4\2\2\u00b3\u00b5\3\2\2\2\u00b4\u00ab\3\2\2\2\u00b4\u00ac\3\2\2\2\u00b4"+
+		"\u00b0\3\2\2\2\u00b5!\3\2\2\2\u00b6\u00b7\5&\24\2\u00b7\u00b8\5(\25\2"+
+		"\u00b8\u00b9\5&\24\2\u00b9#\3\2\2\2\u00ba\u00bb\t\3\2\2\u00bb%\3\2\2\2"+
+		"\u00bc\u00bf\5\32\16\2\u00bd\u00bf\5*\26\2\u00be\u00bc\3\2\2\2\u00be\u00bd"+
+		"\3\2\2\2\u00bf\'\3\2\2\2\u00c0\u00c1\t\4\2\2\u00c1)\3\2\2\2\u00c2\u00c3"+
+		"\t\5\2\2\u00c3+\3\2\2\2\21\62>Xfrx\177\u0089\u008c\u0099\u009b\u009f\u00a9"+
+		"\u00b4\u00be";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

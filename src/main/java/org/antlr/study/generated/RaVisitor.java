@@ -41,12 +41,11 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCrossjoin(RaParser.CrossjoinContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code simpleRelation}
-	 * labeled alternative in {@link RaParser#relation}.
+	 * Visit a parse tree produced by {@link RaParser#rename}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSimpleRelation(RaParser.SimpleRelationContext ctx);
+	T visitRename(RaParser.RenameContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code nestedRelation}
 	 * labeled alternative in {@link RaParser#relation}.
@@ -54,6 +53,13 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNestedRelation(RaParser.NestedRelationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code simpleRelation}
+	 * labeled alternative in {@link RaParser#relation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimpleRelation(RaParser.SimpleRelationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RaParser#orderby}.
 	 * @param ctx the parse tree
@@ -96,12 +102,6 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFullvalue(RaParser.FullvalueContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RaParser#rename}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRename(RaParser.RenameContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RaParser#renameAttr}.
 	 * @param ctx the parse tree

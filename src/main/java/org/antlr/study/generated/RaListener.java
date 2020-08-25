@@ -58,17 +58,15 @@ public interface RaListener extends ParseTreeListener {
 	 */
 	void exitCrossjoin(RaParser.CrossjoinContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code simpleRelation}
-	 * labeled alternative in {@link RaParser#relation}.
+	 * Enter a parse tree produced by {@link RaParser#rename}.
 	 * @param ctx the parse tree
 	 */
-	void enterSimpleRelation(RaParser.SimpleRelationContext ctx);
+	void enterRename(RaParser.RenameContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code simpleRelation}
-	 * labeled alternative in {@link RaParser#relation}.
+	 * Exit a parse tree produced by {@link RaParser#rename}.
 	 * @param ctx the parse tree
 	 */
-	void exitSimpleRelation(RaParser.SimpleRelationContext ctx);
+	void exitRename(RaParser.RenameContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code nestedRelation}
 	 * labeled alternative in {@link RaParser#relation}.
@@ -81,6 +79,18 @@ public interface RaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNestedRelation(RaParser.NestedRelationContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code simpleRelation}
+	 * labeled alternative in {@link RaParser#relation}.
+	 * @param ctx the parse tree
+	 */
+	void enterSimpleRelation(RaParser.SimpleRelationContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code simpleRelation}
+	 * labeled alternative in {@link RaParser#relation}.
+	 * @param ctx the parse tree
+	 */
+	void exitSimpleRelation(RaParser.SimpleRelationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RaParser#orderby}.
 	 * @param ctx the parse tree
@@ -151,16 +161,6 @@ public interface RaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFullvalue(RaParser.FullvalueContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link RaParser#rename}.
-	 * @param ctx the parse tree
-	 */
-	void enterRename(RaParser.RenameContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link RaParser#rename}.
-	 * @param ctx the parse tree
-	 */
-	void exitRename(RaParser.RenameContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link RaParser#renameAttr}.
 	 * @param ctx the parse tree

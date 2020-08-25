@@ -52,7 +52,7 @@ public class RaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements RaV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSimpleRelation(RaParser.SimpleRelationContext ctx) { return visitChildren(ctx); }
+	@Override public T visitRename(RaParser.RenameContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -60,6 +60,13 @@ public class RaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements RaV
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitNestedRelation(RaParser.NestedRelationContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitSimpleRelation(RaParser.SimpleRelationContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -109,13 +116,6 @@ public class RaBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements RaV
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitFullvalue(RaParser.FullvalueContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitRename(RaParser.RenameContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

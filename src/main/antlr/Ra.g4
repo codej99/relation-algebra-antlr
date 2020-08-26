@@ -1,70 +1,70 @@
 grammar Ra;
 
 expr :
-    intersection
-    | union
-    | setDifference
-    | naturalJoin
-    | leftJoin
-    | rightJoin
-    | fullJoin
-    | catesianProduct
-    | selection
-    | projection
-    | rename
-    | relation
+    expr INTERSECTION expr #intersection
+    | expr UNION expr #union
+    | expr DIFFERENCE expr #setDifference
+    | expr NATURAL_JOIN condition? expr #naturalJoin
+    | expr LEFT_OUTER_JOIN condition expr #leftJoin
+    | expr RIGHT_OUTER_JOIN condition expr #rightJoin
+    | expr FULL_OUTER_JOIN condition expr #fullJoin
+    | expr (CARTESIAN expr)+ #catesianProduct
+    | selectionExp #selection
+    | projectionExp #projection
+    | renameExp #rename
+    | relationExp #relation
 ;
 
-intersection :
-    '('expr')' INTERSECTION '('expr')'
-;
+//intersection :
+//    '('expr')' INTERSECTION '('expr')'
+//;
 
-union :
-    '('expr')' UNION '('expr')'
-;
+//union :
+//    '('expr')' UNION '('expr')'
+//;
 
-setDifference :
-    '('expr')' DIFFERENCE '('expr')'
-;
+//setDifference :
+//    '('expr')' DIFFERENCE '('expr')'
+//;
 
-naturalJoin :
-    '('expr')' NATURAL_JOIN condition? '('expr')'
-;
+//naturalJoin :
+//    '('expr')' NATURAL_JOIN condition? '('expr')'
+//;
 
-leftJoin :
-    '('expr')' LEFT_OUTER_JOIN condition '('expr')'
-;
+//leftJoin :
+//    '('expr')' LEFT_OUTER_JOIN condition '('expr')'
+//;
 
-rightJoin :
-    '('expr')' RIGHT_OUTER_JOIN condition '('expr')'
-;
+//rightJoin :
+//    '('expr')' RIGHT_OUTER_JOIN condition '('expr')'
+//;
 
-fullJoin :
-    '('expr')' FULL_OUTER_JOIN condition '('expr')'
-;
+//fullJoin :
+//    '('expr')' FULL_OUTER_JOIN condition '('expr')'
+//;
 
-catesianProduct :
-    '('expr')' (CARTESIAN '('expr')')+
-;
+//catesianProductExp :
+// ('expr')' (CARTESIAN '('expr')')+
+//;
 
-selection :
+selectionExp :
     SELECTION conditions '('expr')'
+    | SELECTION conditions expr
 ;
 
-projection :
+projectionExp :
     PROJECTION attributes '('expr')'
     | PROJECTION attributes expr
 ;
 
-rename :
-    RENAME STRING '('expr')'
-    | RENAME renameAttr (',' renameAttr)+ '('expr')'
-    | RENAME renameAttr (',' renameAttr)+ '('expr')'
+renameExp :
+    RENAME STRING expr
+    | RENAME renameAttr (',' renameAttr)+ expr
 ;
 
-relation :
-    '('expr')' #nestedRelation
-    | STRING #simpleRelation
+relationExp :
+    STRING #simpleRelation
+    | '('expr')' #nestedRelation
 ;
 
 orderby :
@@ -107,7 +107,7 @@ conditions :
     condition
     | condition logicalOps conditions
 //    | NOT conditions
-    | '('conditions')'
+//    | '('conditions')'
 ;
 
 condition :

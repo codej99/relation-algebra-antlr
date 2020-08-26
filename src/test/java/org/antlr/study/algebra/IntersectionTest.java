@@ -16,7 +16,8 @@ public class IntersectionTest {
 
     @Test
     public void intersectionTest() {
-        String ra = "(π b,d (S)) ∩ (π b,d (T))";
+        String ra = "(π b,d S) ∩ (π b,d T)";
+//        String ra = "(π b,d (S)) ∩ (π b,d (T))";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);
@@ -24,12 +25,13 @@ public class IntersectionTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT b,d FROM S INTERSECT SELECT b,d FROM T", query);
+        assertEquals("(SELECT b,d FROM S) INTERSECT (SELECT b,d FROM T)", query);
     }
 
     @Test
     public void intersectionTest2() {
-        String ra = "(π b,d σ b!='L' (S)) ∩ (π b,d σ d>10 (T))";
+        String ra = "(π b,d σ b!='L' S) ∩ (π b,d σ d>10 T)";
+//        String ra = "(π b,d σ b!='L' (S)) ∩ (π b,d σ d>10 (T))";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);
@@ -37,6 +39,6 @@ public class IntersectionTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT b,d FROM S WHERE b!='L' INTERSECT SELECT b,d FROM T WHERE d>10", query);
+        assertEquals("(SELECT b,d FROM S WHERE b!='L') INTERSECT (SELECT b,d FROM T WHERE d>10)", query);
     }
 }

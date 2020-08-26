@@ -11,54 +11,13 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 
-public class ProjectionTest {
-    private static final Logger log = LoggerFactory.getLogger(ProjectionTest.class);
+public class CompositionTest {
+
+    private static final Logger log = LoggerFactory.getLogger(CompositionTest.class);
 
     @Test
-    public void 하나의_projection_구문테스트() {
-        String ra = "π R.a, R.b R";
-//        String ra = "π R.a, R.b (R)";
-        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        RaParser parser = new RaParser(tokens);
-        ParseTree tree = parser.expr();
-        log.info(tree.toStringTree(parser));
-        RaInterpreter interpreter = new RaInterpreter();
-        String query = (String) interpreter.visit(tree);
-        assertEquals("SELECT R.a,R.b FROM R", query);
-    }
-
-    @Test
-    public void 중첩_projection_구문테스트() {
-        String ra = "π x.a, x.b, x.c ρx (π R.a, R.b, R.c R)";
-//        String ra = "π x.a, x.b, x.c ρx (π R.a, R.b, R.c (R))";
-        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        RaParser parser = new RaParser(tokens);
-        ParseTree tree = parser.expr();
-        log.info(tree.toStringTree(parser));
-        RaInterpreter interpreter = new RaInterpreter();
-        String query = (String) interpreter.visit(tree);
-        assertEquals("SELECT x.a,x.b,x.c FROM (SELECT R.a,R.b,R.c FROM R) as x", query);
-    }
-
-//    @Test
-//    public void projection_정렬테스트() {
-//        String ra = "π R.a, R.b τ R.a desc, R.c asc, R.d asc (R)";
-//        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
-//        CommonTokenStream tokens = new CommonTokenStream(lexer);
-//        RaParser parser = new RaParser(tokens);
-//        ParseTree tree = parser.expr();
-//        log.info(tree.toStringTree(parser));
-//        RaInterpreter interpreter = new RaInterpreter();
-//        String query = (String) interpreter.visit(tree);
-//        assertEquals("SELECT R.a,R.b FROM R ORDER BY R.a desc,R.c asc,R.d asc", query);
-//    }
-
-    @Test
-    public void projectionSelection_테스트() {
-        String ra = "π R.a, R.b σ R.a > 0 R";
-//        String ra = "π R.a, R.b σ R.a > 0 (R)";
+    public void compositionTest() {
+        String ra = "(π b,d (S)) ∩ (π b,d (T)) ∪ (π b,d (S)) - (π b,d (T))";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);
@@ -66,14 +25,12 @@ public class ProjectionTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT R.a,R.b FROM R WHERE R.a>0", query);
+        assertEquals("(SELECT b,d FROM S) INTERSECT (SELECT b,d FROM T) UNION (SELECT b,d FROM S) EXCEPT (SELECT b,d FROM T)", query);
     }
 
-    // 다른 예제
     @Test
-    public void projectionCustomer_테스트() {
-        String ra = "π CustomerName, Status Customers";
-//        String ra = "π CustomerName, Status (Customers)";
+    public void compositionTest2() {
+        String ra = "(π b, d S ∩ π b, d T) ∪ (π b, d S - π b, d T)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);
@@ -81,6 +38,32 @@ public class ProjectionTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT CustomerName,Status FROM Customers", query);
+        assertEquals("(SELECT b,d FROM S INTERSECT SELECT b,d FROM T) UNION (SELECT b,d FROM S EXCEPT SELECT b,d FROM T)", query);
+    }
+
+    @Test
+    public void compositionTest3() {
+        String ra = "R ⨝ R.c = S.b S ⨝ S.b = T.b T";
+        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        RaParser parser = new RaParser(tokens);
+        ParseTree tree = parser.expr();
+        log.info(tree.toStringTree(parser));
+        RaInterpreter interpreter = new RaInterpreter();
+        Object query = interpreter.visit(tree);
+        assertEquals("SELECT * FROM R INNER JOIN S ON R.c=S.b INNER JOIN T ON S.b=T.b", query);
+    }
+
+    @Test
+    public void compositionTest4() {
+        String ra = "π R.a, S.b, T.d R ⨝ R.c = S.b S ⨝ S.b = T.b T";
+        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        RaParser parser = new RaParser(tokens);
+        ParseTree tree = parser.expr();
+        log.info(tree.toStringTree(parser));
+        RaInterpreter interpreter = new RaInterpreter();
+        Object query = interpreter.visit(tree);
+        assertEquals("SELECT R.a,S.b,T.d FROM R INNER JOIN S ON R.c=S.b INNER JOIN T ON S.b=T.b", query);
     }
 }

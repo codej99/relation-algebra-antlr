@@ -16,6 +16,7 @@ public class RenameTest {
 
     @Test
     public void 리네임_릴레이션_only_구문테스트() {
+//        String ra = "ρ Rel R";
         String ra = "ρ Rel (R)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -29,6 +30,7 @@ public class RenameTest {
 
     @Test
     public void projection_테이블_리네임테스트() {
+//        String ra = "π Rel.b ρ Rel R";
         String ra = "π Rel.b ρ Rel (R)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -42,6 +44,7 @@ public class RenameTest {
 
     @Test
     public void 중첨_projection_리네임테스트() {
+//        String ra = "π out.b ρ out (π in.b ρ in R)";
         String ra = "π out.b ρ out (π in.b ρ in (R))";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -55,7 +58,8 @@ public class RenameTest {
 
     @Test
     public void 리네임_어트리뷰트_only_테스트() {
-        String ra = "ρ aa←a, bb←b, c (R)";
+        String ra = "ρ aa←a, bb←b, c R";
+//        String ra = "ρ aa←a, bb←b, c (R)"; // 안됨
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);
@@ -68,7 +72,8 @@ public class RenameTest {
 
     @Test
     public void projection_어트리뷰트_리네임테스트() {
-        String ra = "ρ x←R.a, y←R.b (π R.a, R.b (R))";
+//        String ra = "ρ x←R.a, y←R.b π R.a, R.b R";
+        String ra = "ρ x←R.a, y←R.b π R.a, R.b (R)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);
@@ -81,7 +86,8 @@ public class RenameTest {
 
     @Test
     public void 리네임_어트리뷰트_릴레이션_리네임테스트() {
-        String ra = "ρ aa←Rel.a, bb←Rel.b (π Rel.a, Rel.b, Rel.c ρ Rel (R))";
+//        String ra = "ρ aa←Rel.a, bb←Rel.b π Rel.a, Rel.b, Rel.c ρ Rel R";
+        String ra = "ρ aa←Rel.a, bb←Rel.b π Rel.a, Rel.b, Rel.c ρ Rel (R)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);

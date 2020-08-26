@@ -16,6 +16,7 @@ public class SelectionTest {
 
     @Test
     public void selectionTest() {
+//        String ra = "σ R.a > 0 R";
         String ra = "σ R.a > 0 (R)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -29,6 +30,7 @@ public class SelectionTest {
 
     @Test
     public void selectionMultiConditionTest() {
+//        String ra = "σ R.a > 0 AND R.a < 10 OR R.c > 100 R";
         String ra = "σ R.a > 0 AND R.a < 10 OR R.c > 100 (R)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -43,7 +45,8 @@ public class SelectionTest {
     // 다른 예제
     @Test
     public void selectionOneConditionTest() {
-        String ra = "σ topic = 'Database' (Tutorials)";
+        String ra = "σ topic = 'Database' Tutorials";
+//        String ra = "σ topic = 'Database' (Tutorials)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);
@@ -56,7 +59,8 @@ public class SelectionTest {
 
     @Test
     public void selectionTwoConditionTest() {
-        String ra = "σ topic = 'Database' and author = 'abel' or sales > 50000 (Tutorials)";
+        String ra = "σ topic = 'Database' and author = 'abel' or sales > 50000 Tutorials";
+//        String ra = "σ topic = 'Database' and author = 'abel' or sales > 50000 (Tutorials)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);

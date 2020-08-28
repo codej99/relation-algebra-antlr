@@ -16,8 +16,8 @@ public class UnionTest {
 
     @Test
     public void unionTest() {
-        String ra = "(π b, d S) ∪ (π b, d T)";
-//        String ra = "(π b, d (S)) ∪ (π b, d (T))";
+//        String ra = "(π b, d S) ∪ (π b, d T)";
+        String ra = "(π b, d (S)) ∪ (π b, d (T))";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);

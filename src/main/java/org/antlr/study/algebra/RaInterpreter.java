@@ -17,7 +17,10 @@ import static org.antlr.study.generated.RaParser.*;
 public class RaInterpreter extends RaBaseVisitor {
     private static final Logger log = LoggerFactory.getLogger(RaInterpreter.class);
     private static final String SPACE = " ";
-    private static final List JOIN_OPERATOR = Arrays.asList(IntersectionContext.class, UnionContext.class, SetDifferenceContext.class, NaturalJoinContext.class, CatesianProductContext.class, LeftJoinContext.class, RightJoinContext.class, FullJoinContext.class);
+    private static final String COMMA = ",";
+    private static final List JOIN_OPERATOR = Arrays.asList(IntersectionContext.class,
+            UnionContext.class, SetDifferenceContext.class, NaturalJoinContext.class, CatesianProductContext.class,
+            LeftJoinContext.class, RightJoinContext.class, FullJoinContext.class, RenameExprContext.class, OrderbyExprContext.class);
 
     @Override
     public String visitIntersection(RaParser.IntersectionContext ctx) {
@@ -144,43 +147,27 @@ public class RaInterpreter extends RaBaseVisitor {
 
     @Override
     public String visitProjection(RaParser.ProjectionContext ctx) {
-        String orderby = "";
-//        if (ctx.orderby() != null) {
-//            orderby = " ORDER BY ";
-//            int cnt = ctx.orderby().orders().getChildCount();
-//            for (int i = 0; i < cnt; i++) {
-//                if (ctx.orderby().orders().getChild(i) instanceof RaParser.OrderContext) {
-//                    RaParser.OrderContext order = (RaParser.OrderContext) ctx.orderby().orders().getChild(i);
-//                    orderby += order.attribute().getText() + " " + order.direction().getText();
-//                } else {
-//                    orderby += ctx.orderby().orders().getChild(i).getText();
-//                }
-//            }
-//        }
         StringJoiner subQuery = new StringJoiner(SPACE);
-        String attributes = ctx.projectionExp().attributes().getText();
-        Object expr = visit(ctx.projectionExp().expr());
+        String attributes = ctx.projectionExpr().attributes().getText();
+        Object expr = visit(ctx.projectionExpr().expr());
         subQuery.add("SELECT").add(attributes).add("FROM").add(expr.toString());
-//      subQuery.add(orderby);
-        // after visit - check nesting
+        // check nesting
         boolean nesting = isNested(ctx.getParent());
         StringBuilder query = new StringBuilder();
         // select 구문이 nesting 되는 경우. 부모가 rename이면 괄호로 감싸지 않는다.
-        if (nesting && ctx.getParent().getClass() != RaParser.RenameExpContext.class) {
+        if (nesting) {
             query.append("(").append(subQuery).append(")");
         } else {
             query.append(subQuery.toString());
         }
-        log.debug("nesting={} - parent={} - expr={} - class={}", nesting, nesting ? ctx.getParent().getClass() : null, expr, expr.getClass());
-        log.debug("attributes={} - orderby={}", attributes, orderby);
-        log.debug("subQuery={}, query={}", subQuery, query);
+        log.debug("nesting={} - attributes={} - subQuery={} - query={}", nesting, attributes, subQuery, query);
         return query.toString();
     }
 
     @Override
     public String visitSelection(RaParser.SelectionContext ctx) {
         StringJoiner conditions = new StringJoiner(SPACE);
-        RaParser.ConditionsContext condContext = ctx.selectionExp().conditions();
+        RaParser.ConditionsContext condContext = ctx.selectionExpr().conditions();
         // 조건 조합
         while (condContext != null) {
             List<ParseTree> tree = condContext.children;
@@ -191,17 +178,16 @@ public class RaInterpreter extends RaBaseVisitor {
             // next element
             condContext = condContext.conditions();
         }
-        Object expr = visit(ctx.selectionExp().expr());
+        Object expr = visit(ctx.selectionExpr().expr());
         StringJoiner subQuery = new StringJoiner(SPACE);
-        // after visit - check nesting
+        // check nesting
         boolean nesting = isNested(ctx.getParent());
         if (nesting) {
             subQuery.add(expr.toString()).add("WHERE").add(conditions.toString());
         } else {
             subQuery.add("SELECT").add("*").add("FROM").add(expr.toString()).add("WHERE").add(conditions.toString());
         }
-        log.debug("nesting={} - expr={} - class={}", nesting, expr, expr.getClass());
-        log.debug("conditions={} - query={}", conditions, subQuery);
+        log.debug("nesting={} - expr={} - class={} - conditions={} - query={}", nesting, expr, expr.getClass(), conditions, subQuery);
         return subQuery.toString();
     }
 
@@ -225,7 +211,6 @@ public class RaInterpreter extends RaBaseVisitor {
      */
     @Override
     public Object visitNestedRelation(RaParser.NestedRelationContext ctx) {
-//        nested = true;
         Object expr = visit(ctx.expr());
         log.debug("nested relation ={} - class={}", expr, expr.getClass());
         return expr;
@@ -240,76 +225,116 @@ public class RaInterpreter extends RaBaseVisitor {
     @Override
     public String visitRename(RaParser.RenameContext ctx) {
         boolean nesting = isNested(ctx.getParent());
-        // 부모 구문이 존재하는 경우 일부 rename 쿼리만 작성하여 리턴
+        // 중첩된 구문일경우 일부 rename 쿼리만 작성하여 리턴
         if (nesting) {
-            log.debug("Rename with parent expression");
-            Object expr = visit(ctx.renameExp().expr());
-            if (ctx.renameExp().expr().getClass() == RaParser.RelationContext.class) {
-                log.debug("simple rename={}", ctx.renameExp().expr().getText());
+            Object expr = visit(ctx.renameExpr().expr());
+            log.debug("Nested rename={} class={}", ctx.renameExpr().expr().getText(), ctx.renameExpr().expr().getClass());
+            if (ctx.renameExpr().expr().getClass() == RaParser.RelationContext.class) {
                 // relation 리네임
-                if (ctx.renameExp().renameAttr().isEmpty()) {
+                if (ctx.renameExpr().renameAttrs() == null) {
                     StringJoiner query = new StringJoiner(SPACE);
-                    query.add(expr.toString()).add("as").add(ctx.renameExp().STRING().getText());
+                    query.add(expr.toString()).add("as").add(ctx.renameExpr().STRING().getText());
                     return query.toString();
-                    // relation 어트리뷰트 리네임
+                    // 어트리뷰트 리네임
                 } else {
-                    return makeRenamedAttr(ctx.renameExp().renameAttr(), expr.toString());
+                    return makeRenamedAttr(ctx.renameExpr().renameAttrs(), expr.toString());
                 }
             } else {
                 log.debug("nested rename={}", expr);
                 StringBuilder query = new StringBuilder();
-                query.append("(").append(expr).append(") as ").append(ctx.renameExp().STRING());
+                query.append("(").append(expr).append(") as ").append(ctx.renameExpr().STRING());
                 return query.toString();
             }
             // rename 구문만 존재하는 경우 SELECT 문을 모두 작성하여 리턴 ex) ρ Rel (R)
         } else {
-            log.debug("Rename only expression");
-            Object expr = visit(ctx.renameExp().expr());
+            log.debug("Simple Rename={}", ctx.renameExpr().expr().getText());
+            Object expr = visit(ctx.renameExpr().expr());
             StringJoiner query = new StringJoiner(SPACE);
             // relation 리네임
-            if (ctx.renameExp().renameAttr().isEmpty()) {
+            if (ctx.renameExpr().renameAttrs() == null) {
                 log.debug("Relation rename expr={}", expr);
-                query.add("SELECT").add(ctx.renameExp().STRING() + ".*")
-                        .add("FROM").add(expr.toString()).add("as").add(ctx.renameExp().STRING().getText());
+                query.add("SELECT").add(ctx.renameExpr().STRING() + ".*")
+                        .add("FROM").add(expr.toString()).add("as").add(ctx.renameExpr().STRING().getText());
                 // 어트리뷰트 리네임
             } else {
                 // 어트리뷰트를 생성
-                if (ctx.renameExp().expr().getClass() == RaParser.RelationContext.class) {
-                    log.debug("Rename Attribute : expr={}", ctx.renameExp().expr().getText());
-                    String attrs = makeRenamedAttr(ctx.renameExp().renameAttr(), expr.toString());
-                    query.add("SELECT").add(attrs).add("FROM").add(ctx.renameExp().expr().getText());
+                if (ctx.renameExpr().expr().getClass() == RaParser.RelationContext.class) {
+                    log.debug("Make rename Attribute : expr={}", ctx.renameExpr().expr().getText());
+                    String attrs = makeRenamedAttr(ctx.renameExpr().renameAttrs(), expr.toString());
+                    query.add("SELECT").add(attrs).add("FROM").add(ctx.renameExpr().expr().getText());
                     // 기존 어트리뷰트를 rename
                 } else {
-                    log.debug("nested rename={}", expr);
-                    return renameAttributes(ctx.renameExp().renameAttr(), expr.toString());
+                    log.debug("Replace rename={}", expr);
+                    return renameAttributes(ctx.renameExpr().renameAttrs(), expr.toString());
                 }
             }
             return query.toString();
         }
     }
 
-    private String makeRenamedAttr(List<RaParser.RenameAttrContext> attributes, String expr) {
+    @Override
+    public String visitOrderby(RaParser.OrderbyContext ctx) {
+        boolean nesting = isNested(ctx.getParent());
+        log.debug("nesting={} - orderby={}", nesting, ctx.orderbyExpr().getText());
+        StringJoiner orders = new StringJoiner(",");
+        for (int i = 0; i < ctx.orderbyExpr().orders().getChildCount(); i++) {
+            OrderContext order = ctx.orderbyExpr().orders().order(i);
+            if (order != null)
+                orders.add(order.attribute().getText() + SPACE + order.direction().getText());
+        }
+        // 중
+        if (nesting) {
+            return "ORDER BY" + SPACE + orders.toString();
+        } else {
+            Object expr = visit(ctx.orderbyExpr().expr());
+            return expr.toString() + SPACE + "ORDER BY" + SPACE + orders.toString();
+        }
+    }
+
+    private String makeRenamedAttr(RenameAttrsContext attributes, String expr) {
         StringBuilder attr = new StringBuilder();
-        for (RaParser.RenameAttrContext attribute : attributes) {
-            if (!attr.toString().equals(""))
-                attr.append(",");
-            if (attribute.getChildCount() == 3) {
-                attr.append(expr).append(".").append(attribute.getChild(2).getText()).append(" as ").append(attribute.getChild(0).getText());
-            } else {
-                attr.append(expr).append(".").append(attribute.getText());
-            }
+        RenameAttrsContext renameAttrs = attributes;
+        // 조건 조합
+        while (renameAttrs != null) {
+            List<ParseTree> tree = renameAttrs.children;
+            tree.stream()
+                    .filter(parseTree -> parseTree.getClass() == RaParser.RenameAttrContext.class)
+                    .map(attribute -> {
+                        if (!attr.toString().equals(""))
+                            attr.append(",");
+                        if (attribute.getChildCount() == 3) {
+                            attr.append(expr).append(".").append(attribute.getChild(2).getText()).append(" as ").append(attribute.getChild(0).getText());
+                        } else {
+                            attr.append(expr).append(".").append(attribute.getText());
+                        }
+                        return attr.toString();
+                    }).collect(Collectors.joining());
+            // next element
+            renameAttrs = renameAttrs.renameAttrs();
         }
         return attr.toString();
     }
 
-    private String renameAttributes(List<RaParser.RenameAttrContext> attributes, String sql) {
-        for (RaParser.RenameAttrContext attribute : attributes) {
+    private String renameAttributes(RenameAttrsContext attributes, String sql) {
+        StringJoiner renameAttributes = new StringJoiner(COMMA);
+        ;
+        RenameAttrsContext renameAttrs = attributes;
+        // 조건 조합
+        while (renameAttrs != null) {
+            List<ParseTree> tree = renameAttrs.children;
             StringBuilder attr = new StringBuilder();
-            if (attribute.getChildCount() == 3) {
-                attr.append(attribute.getChild(2).getText()).append(" as ").append(attribute.getChild(0).getText());
-                log.debug("origin={} / replace={} => to={}", sql, attribute.getChild(2).getText(), attr);
-                sql = sql.replace(attribute.getChild(2).getText(), attr.toString());
+            for (ParseTree parseTree : tree) {
+                if (parseTree.getClass() == RaParser.RenameAttrContext.class) {
+                    RaParser.RenameAttrContext attribute = (RaParser.RenameAttrContext) parseTree;
+                    if (attribute.getChildCount() == 3) {
+                        attr.append(attribute.getChild(2).getText()).append(" as ").append(attribute.getChild(0).getText());
+                        log.debug("replace={} => to={}", attribute.getChild(2).getText(), attr);
+                        sql = sql.replaceFirst(attribute.getChild(2).getText(), attr.toString());
+                    }
+                }
             }
+            renameAttributes.add(attr);
+            renameAttrs = renameAttrs.renameAttrs();
         }
         return sql;
     }

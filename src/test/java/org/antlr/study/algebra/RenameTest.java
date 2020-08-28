@@ -85,7 +85,7 @@ public class RenameTest {
     }
 
     @Test
-    public void 리네임_어트리뷰트_릴레이션_리네임테스트() {
+    public void 어트리뷰트_릴레이션_리네임테스트() {
 //        String ra = "ρ aa←Rel.a, bb←Rel.b π Rel.a, Rel.b, Rel.c ρ Rel R";
         String ra = "ρ aa←Rel.a, bb←Rel.b π Rel.a, Rel.b, Rel.c ρ Rel (R)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
@@ -96,5 +96,18 @@ public class RenameTest {
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
         assertEquals("SELECT Rel.a as aa,Rel.b as bb,Rel.c FROM R as Rel", query);
+    }
+
+    @Test
+    public void 어트리뷰트_컨디션_리네임테스트() {
+        String ra = "ρ x←R.a, y←R.b, z←R.c π R.a, R.b, R.c σ R.a > 10 R";
+        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        RaParser parser = new RaParser(tokens);
+        ParseTree tree = parser.expr();
+        log.info(tree.toStringTree(parser));
+        RaInterpreter interpreter = new RaInterpreter();
+        Object query = interpreter.visit(tree);
+        assertEquals("SELECT R.a as x,R.b as y,R.c as z FROM R WHERE R.a>10", query);
     }
 }

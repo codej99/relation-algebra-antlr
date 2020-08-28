@@ -11,6 +11,34 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by the {@code fullJoin}
+	 * labeled alternative in {@link RaParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFullJoin(RaParser.FullJoinContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code orderby}
+	 * labeled alternative in {@link RaParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOrderby(RaParser.OrderbyContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code union}
+	 * labeled alternative in {@link RaParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnion(RaParser.UnionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code relation}
+	 * labeled alternative in {@link RaParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelation(RaParser.RelationContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code rightJoin}
 	 * labeled alternative in {@link RaParser#expr}.
 	 * @param ctx the parse tree
@@ -60,13 +88,6 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCatesianProduct(RaParser.CatesianProductContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code fullJoin}
-	 * labeled alternative in {@link RaParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFullJoin(RaParser.FullJoinContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code leftJoin}
 	 * labeled alternative in {@link RaParser#expr}.
 	 * @param ctx the parse tree
@@ -81,57 +102,43 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProjection(RaParser.ProjectionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code union}
-	 * labeled alternative in {@link RaParser#expr}.
+	 * Visit a parse tree produced by {@link RaParser#selectionExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUnion(RaParser.UnionContext ctx);
+	T visitSelectionExpr(RaParser.SelectionExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code relation}
-	 * labeled alternative in {@link RaParser#expr}.
+	 * Visit a parse tree produced by {@link RaParser#projectionExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitRelation(RaParser.RelationContext ctx);
+	T visitProjectionExpr(RaParser.ProjectionExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RaParser#selectionExp}.
+	 * Visit a parse tree produced by {@link RaParser#renameExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSelectionExp(RaParser.SelectionExpContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RaParser#projectionExp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitProjectionExp(RaParser.ProjectionExpContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link RaParser#renameExp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRenameExp(RaParser.RenameExpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code simpleRelation}
-	 * labeled alternative in {@link RaParser#relationExp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSimpleRelation(RaParser.SimpleRelationContext ctx);
+	T visitRenameExpr(RaParser.RenameExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code nestedRelation}
-	 * labeled alternative in {@link RaParser#relationExp}.
+	 * labeled alternative in {@link RaParser#relationExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitNestedRelation(RaParser.NestedRelationContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link RaParser#orderby}.
+	 * Visit a parse tree produced by the {@code simpleRelation}
+	 * labeled alternative in {@link RaParser#relationExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitOrderby(RaParser.OrderbyContext ctx);
+	T visitSimpleRelation(RaParser.SimpleRelationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#orderbyExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOrderbyExpr(RaParser.OrderbyExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RaParser#orders}.
 	 * @param ctx the parse tree
@@ -168,6 +175,12 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFullvalue(RaParser.FullvalueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#renameAttrs}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRenameAttrs(RaParser.RenameAttrsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link RaParser#renameAttr}.
 	 * @param ctx the parse tree

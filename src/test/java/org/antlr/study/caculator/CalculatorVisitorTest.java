@@ -25,7 +25,7 @@ public class CalculatorVisitorTest {
 
     @Test
     public void mulDivTest() throws Exception {
-        String ra = "6*2/4";
+        String ra = "1*2+3*(4+5)";
         CalculatorLexer lexer = new CalculatorLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CalculatorParser parser = new CalculatorParser(tokens);
@@ -33,7 +33,7 @@ public class CalculatorVisitorTest {
         System.out.println(tree.toStringTree(parser));
         CalculatorInterpreter interpreter = new CalculatorInterpreter();
         Integer query = (Integer) interpreter.visit(tree);
-        assertSame(3, query);
+        assertSame(29, query);
     }
 
     @Test

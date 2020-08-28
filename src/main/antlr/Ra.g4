@@ -9,70 +9,37 @@ expr :
     | expr RIGHT_OUTER_JOIN condition expr #rightJoin
     | expr FULL_OUTER_JOIN condition expr #fullJoin
     | expr (CARTESIAN expr)+ #catesianProduct
-    | selectionExp #selection
-    | projectionExp #projection
-    | renameExp #rename
-    | relationExp #relation
+    | selectionExpr #selection
+    | projectionExpr #projection
+    | renameExpr #rename
+    | orderbyExpr #orderby
+    | relationExpr #relation
 ;
 
-//intersection :
-//    '('expr')' INTERSECTION '('expr')'
-//;
-
-//union :
-//    '('expr')' UNION '('expr')'
-//;
-
-//setDifference :
-//    '('expr')' DIFFERENCE '('expr')'
-//;
-
-//naturalJoin :
-//    '('expr')' NATURAL_JOIN condition? '('expr')'
-//;
-
-//leftJoin :
-//    '('expr')' LEFT_OUTER_JOIN condition '('expr')'
-//;
-
-//rightJoin :
-//    '('expr')' RIGHT_OUTER_JOIN condition '('expr')'
-//;
-
-//fullJoin :
-//    '('expr')' FULL_OUTER_JOIN condition '('expr')'
-//;
-
-//catesianProductExp :
-// ('expr')' (CARTESIAN '('expr')')+
-//;
-
-selectionExp :
-    SELECTION conditions '('expr')'
-    | SELECTION conditions expr
+selectionExpr :
+    SELECTION conditions expr
 ;
 
-projectionExp :
-    PROJECTION attributes '('expr')'
-    | PROJECTION attributes expr
+projectionExpr :
+    PROJECTION attributes expr
 ;
 
-renameExp :
-    RENAME STRING expr
-    | RENAME renameAttr (',' renameAttr)+ expr
+renameExpr :
+    RENAME STRING expr // relation rename
+    | RENAME renameAttrs expr
 ;
 
-relationExp :
-    STRING #simpleRelation
-    | '('expr')' #nestedRelation
+relationExpr :
+    LBRACE expr RBRACE #nestedRelation
+    | STRING #simpleRelation
 ;
 
-orderby :
-    ORDER_BY orders
+orderbyExpr :
+    ORDER_BY orders (expr)?
 ;
 
 orders :
-    order (',' order)+
+    order (COMMA order)*
     | order
 ;
 
@@ -86,7 +53,7 @@ direction :
 
 attributes :
     attribute
-    | attribute (',' attribute)+
+    | attribute COMMA attributes
 ;
 
 attribute :
@@ -95,7 +62,12 @@ attribute :
 ;
 
 fullvalue :
-    STRING '.' STRING
+    STRING PERIOD STRING
+;
+
+renameAttrs :
+    renameAttr
+    | renameAttr COMMA renameAttrs
 ;
 
 renameAttr :
@@ -106,8 +78,6 @@ renameAttr :
 conditions :
     condition
     | condition logicalOps conditions
-//    | NOT conditions
-//    | '('conditions')'
 ;
 
 condition :
@@ -137,10 +107,6 @@ AND:
 
 OR:
     O R
-;
-
-NOT:
-    N O T
 ;
 
 ASC:
@@ -178,6 +144,11 @@ LESSER: '<';
 
 STRING: [a-zA-Z0-9_']+ ;
 NUMBER: [0-9]+ ;
+
+PERIOD: '.';
+COMMA: ',';
+LBRACE: '(';
+RBRACE: ')';
 
 WS
 :

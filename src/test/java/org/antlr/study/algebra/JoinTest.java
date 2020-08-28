@@ -50,8 +50,8 @@ public class JoinTest {
      */
     @Test
     public void innerJoinProjectionTest() {
-//        String ra = "π S.b, T.b (S ⨝ S.b = T.b T)";
-        String ra = "π S.b, T.b ((S) ⨝ S.b = T.b (T))";
+        String ra = "π S.b, T.b S ⨝ S.b = T.b T";
+//        String ra = "π S.b, T.b ((S) ⨝ S.b = T.b (T))";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);
@@ -67,8 +67,8 @@ public class JoinTest {
      */
     @Test
     public void innerJoinProjectionAndConditionTest() {
-//        String ra = "π S.b, T.b σ S.d > 10 (S ⨝ S.b = T.b T)";
-        String ra = "π S.b, T.b σ S.d > 10 ((S) ⨝ S.b = T.b (T))";
+        String ra = "π S.b, T.b σ S.d > 10 S ⨝ S.b = T.b T";
+//        String ra = "π S.b, T.b σ S.d > 10 ((S) ⨝ S.b = T.b (T))";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);
@@ -137,8 +137,8 @@ public class JoinTest {
 
     @Test
     public void leftJoinSelectionTest() {
-//        String ra = "σ R.a > 1 (R ⟕ R.b = T.b T)";
-        String ra = "σ R.a > 1 ((R) ⟕ R.b = T.b (T))";
+        String ra = "σ R.a > 1 (R ⟕ R.b = T.b T)";
+//        String ra = "σ R.a > 1 ((R) ⟕ R.b = T.b (T))";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);

@@ -14,10 +14,23 @@ import static org.junit.Assert.assertEquals;
 public class SelectionTest {
     private static final Logger log = LoggerFactory.getLogger(SelectionTest.class);
 
+//    @Test
+    public void selectionOneTest() {
+        String ra = "(R)";
+        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        RaParser parser = new RaParser(tokens);
+        ParseTree tree = parser.expr();
+        log.info(tree.toStringTree(parser));
+        RaInterpreter interpreter = new RaInterpreter();
+        Object query = interpreter.visit(tree);
+        assertEquals("SELECT * FROM R", query);
+    }
+
     @Test
     public void selectionTest() {
-//        String ra = "σ R.a > 0 R";
-        String ra = "σ R.a > 0 (R)";
+        String ra = "σ R.a > 0 R";
+//        String ra = "σ R.a > 0 (R)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);

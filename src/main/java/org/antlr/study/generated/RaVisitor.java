@@ -25,6 +25,13 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitOrderby(RaParser.OrderbyContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code groupby}
+	 * labeled alternative in {@link RaParser#expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroupby(RaParser.GroupbyContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code union}
 	 * labeled alternative in {@link RaParser#expr}.
 	 * @param ctx the parse tree
@@ -119,6 +126,24 @@ public interface RaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRenameExpr(RaParser.RenameExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#groupbyExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroupbyExpr(RaParser.GroupbyExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#groupByAttrs}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroupByAttrs(RaParser.GroupByAttrsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link RaParser#groupByAttr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGroupByAttr(RaParser.GroupByAttrContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code nestedRelation}
 	 * labeled alternative in {@link RaParser#relationExpr}.

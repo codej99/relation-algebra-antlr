@@ -40,6 +40,18 @@ public class RaBaseListener implements RaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterGroupby(RaParser.GroupbyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGroupby(RaParser.GroupbyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterUnion(RaParser.UnionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -203,6 +215,42 @@ public class RaBaseListener implements RaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitRenameExpr(RaParser.RenameExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGroupbyExpr(RaParser.GroupbyExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGroupbyExpr(RaParser.GroupbyExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGroupByAttrs(RaParser.GroupByAttrsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGroupByAttrs(RaParser.GroupByAttrsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGroupByAttr(RaParser.GroupByAttrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGroupByAttr(RaParser.GroupByAttrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

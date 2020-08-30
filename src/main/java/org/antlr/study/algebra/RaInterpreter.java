@@ -22,38 +22,47 @@ public class RaInterpreter extends RaBaseVisitor {
             UnionContext.class, SetDifferenceContext.class, NaturalJoinContext.class, CatesianProductContext.class,
             LeftJoinContext.class, RightJoinContext.class, FullJoinContext.class, RenameExprContext.class, OrderbyExprContext.class);
 
+    private Class beforeVisit = null;
+
+    public Class getBeforeVisit() {
+        return beforeVisit;
+    }
+
     @Override
-    public String visitIntersection(RaParser.IntersectionContext ctx) {
+    public String visitIntersection(IntersectionContext ctx) {
         Object left = visit(ctx.expr(0));
         Object right = visit(ctx.expr(1));
         StringJoiner subQuery = new StringJoiner(SPACE);
         subQuery.add(left.toString()).add("INTERSECT").add(right.toString());
         log.debug("left={} - right={} - query={}", left, right, subQuery);
+        beforeVisit = IntersectionContext.class;
         return subQuery.toString();
     }
 
     @Override
-    public String visitUnion(RaParser.UnionContext ctx) {
+    public String visitUnion(UnionContext ctx) {
         Object left = visit(ctx.expr(0));
         Object right = visit(ctx.expr(1));
         StringJoiner subQuery = new StringJoiner(SPACE);
         subQuery.add(left.toString()).add("UNION").add(right.toString());
         log.debug("left={} - right={} - query={}", left, right, subQuery);
+        beforeVisit = UnionContext.class;
         return subQuery.toString();
     }
 
     @Override
-    public String visitSetDifference(RaParser.SetDifferenceContext ctx) {
+    public String visitSetDifference(SetDifferenceContext ctx) {
         Object left = visit(ctx.expr(0));
         Object right = visit(ctx.expr(1));
         StringJoiner subQuery = new StringJoiner(SPACE);
         subQuery.add(left.toString()).add("EXCEPT").add(right.toString());
         log.debug("left={} - right={} - query={}", left, right, subQuery);
+        beforeVisit = SetDifferenceContext.class;
         return subQuery.toString();
     }
 
     @Override
-    public String visitNaturalJoin(RaParser.NaturalJoinContext ctx) {
+    public String visitNaturalJoin(NaturalJoinContext ctx) {
         boolean nesting = ctx.getParent() != null;
         Object left = visit(ctx.expr(0));
         Object right = visit(ctx.expr(1));
@@ -71,11 +80,12 @@ public class RaInterpreter extends RaBaseVisitor {
             query.add("SELECT").add("*").add("FROM").add(subQuery.toString());
 
         log.debug("nesting={} - left={} - right={} - condition={} - query={}", nesting, left, right, ctx.condition(), query);
+        beforeVisit = NaturalJoinContext.class;
         return query.toString();
     }
 
     @Override
-    public String visitCatesianProduct(RaParser.CatesianProductContext ctx) {
+    public String visitCatesianProduct(CatesianProductContext ctx) {
         boolean nesting = ctx.getParent() != null;
         StringJoiner subQuery = new StringJoiner(",");
         Object left = visit(ctx.expr(0));
@@ -88,11 +98,12 @@ public class RaInterpreter extends RaBaseVisitor {
             query.add("SELECT").add("*").add("FROM").add(subQuery.toString());
 
         log.debug("nesting={} - subQuery={} - query={}", nesting, subQuery, query);
+        beforeVisit = CatesianProductContext.class;
         return query.toString();
     }
 
     @Override
-    public String visitLeftJoin(RaParser.LeftJoinContext ctx) {
+    public String visitLeftJoin(LeftJoinContext ctx) {
         boolean nesting = isNested(ctx.getParent());
         Object left = visit(ctx.expr(0));
         Object right = visit(ctx.expr(1));
@@ -106,11 +117,12 @@ public class RaInterpreter extends RaBaseVisitor {
             query.add("SELECT").add("*").add("FROM").add(subQuery.toString());
 
         log.debug("nesting={} - left={} - right={} - condition={} - query={}", nesting, left, right, ctx.condition(), query);
+        beforeVisit = LeftJoinContext.class;
         return query.toString();
     }
 
     @Override
-    public String visitRightJoin(RaParser.RightJoinContext ctx) {
+    public String visitRightJoin(RightJoinContext ctx) {
         boolean nesting = isNested(ctx.getParent());
         Object left = visit(ctx.expr(0));
         Object right = visit(ctx.expr(1));
@@ -124,11 +136,12 @@ public class RaInterpreter extends RaBaseVisitor {
             query.add("SELECT").add("*").add("FROM").add(subQuery.toString());
 
         log.debug("nesting={} - left={} - right={} - condition={} - query={}", nesting, left, right, ctx.condition(), query);
+        beforeVisit = RightJoinContext.class;
         return query.toString();
     }
 
     @Override
-    public String visitFullJoin(RaParser.FullJoinContext ctx) {
+    public String visitFullJoin(FullJoinContext ctx) {
         boolean nesting = isNested(ctx.getParent());
         Object left = visit(ctx.expr(0));
         Object right = visit(ctx.expr(1));
@@ -142,37 +155,43 @@ public class RaInterpreter extends RaBaseVisitor {
             query.add("SELECT").add("*").add("FROM").add(subQuery.toString());
 
         log.debug("nesting={} - left={} - right={} - condition={} - query={}", nesting, left, right, ctx.condition(), query);
+        beforeVisit = FullJoinContext.class;
         return query.toString();
     }
 
     @Override
-    public String visitProjection(RaParser.ProjectionContext ctx) {
+    public String visitProjection(ProjectionContext ctx) {
         StringJoiner subQuery = new StringJoiner(SPACE);
         String attributes = ctx.projectionExpr().attributes().getText();
         Object expr = visit(ctx.projectionExpr().expr());
-        subQuery.add("SELECT").add(attributes).add("FROM").add(expr.toString());
         // check nesting
         boolean nesting = isNested(ctx.getParent());
+        // Groupby에서 생성된 select 문의 attribute를 projection에서 사용한다.
+        if (beforeVisit == GroupbyContext.class)
+            subQuery.add(expr.toString());
+        else
+            subQuery.add("SELECT").add(attributes).add("FROM").add(expr.toString());
+
         StringBuilder query = new StringBuilder();
-        // select 구문이 nesting 되는 경우. 부모가 rename이면 괄호로 감싸지 않는다.
         if (nesting) {
             query.append("(").append(subQuery).append(")");
         } else {
             query.append(subQuery.toString());
         }
-        log.debug("nesting={} - attributes={} - subQuery={} - query={}", nesting, attributes, subQuery, query);
+        log.debug("nesting={} - parent={} - attributes={} - subQuery={} - query={}", nesting, ctx.getText(), attributes, subQuery, query);
+        beforeVisit = ProjectionContext.class;
         return query.toString();
     }
 
     @Override
-    public String visitSelection(RaParser.SelectionContext ctx) {
+    public String visitSelection(SelectionContext ctx) {
         StringJoiner conditions = new StringJoiner(SPACE);
-        RaParser.ConditionsContext condContext = ctx.selectionExpr().conditions();
+        ConditionsContext condContext = ctx.selectionExpr().conditions();
         // 조건 조합
         while (condContext != null) {
             List<ParseTree> tree = condContext.children;
             String condition = tree.stream()
-                    .filter(parseTree -> parseTree.getClass() == RaParser.ConditionContext.class || parseTree.getClass() == RaParser.LogicalOpsContext.class)
+                    .filter(parseTree -> parseTree.getClass() == ConditionContext.class || parseTree.getClass() == LogicalOpsContext.class)
                     .map(ParseTree::getText).collect(Collectors.joining(SPACE));
             conditions.add(condition);
             // next element
@@ -188,6 +207,7 @@ public class RaInterpreter extends RaBaseVisitor {
             subQuery.add("SELECT").add("*").add("FROM").add(expr.toString()).add("WHERE").add(conditions.toString());
         }
         log.debug("nesting={} - expr={} - class={} - conditions={} - query={}", nesting, expr, expr.getClass(), conditions, subQuery);
+        beforeVisit = SelectionContext.class;
         return subQuery.toString();
     }
 
@@ -198,8 +218,9 @@ public class RaInterpreter extends RaBaseVisitor {
      * @return
      */
     @Override
-    public String visitSimpleRelation(RaParser.SimpleRelationContext ctx) {
+    public String visitSimpleRelation(SimpleRelationContext ctx) {
         log.debug("simple relation={}", ctx.getText());
+        beforeVisit = SimpleRelationContext.class;
         return ctx.STRING().getText();
     }
 
@@ -210,9 +231,10 @@ public class RaInterpreter extends RaBaseVisitor {
      * @return
      */
     @Override
-    public Object visitNestedRelation(RaParser.NestedRelationContext ctx) {
+    public Object visitNestedRelation(NestedRelationContext ctx) {
         Object expr = visit(ctx.expr());
         log.debug("nested relation ={} - class={}", expr, expr.getClass());
+        beforeVisit = NestedRelationContext.class;
         return expr;
     }
 
@@ -223,13 +245,14 @@ public class RaInterpreter extends RaBaseVisitor {
      * @return
      */
     @Override
-    public String visitRename(RaParser.RenameContext ctx) {
+    public String visitRename(RenameContext ctx) {
         boolean nesting = isNested(ctx.getParent());
+        beforeVisit = RenameContext.class;
         // 중첩된 구문일경우 일부 rename 쿼리만 작성하여 리턴
         if (nesting) {
             Object expr = visit(ctx.renameExpr().expr());
             log.debug("Nested rename={} class={}", ctx.renameExpr().expr().getText(), ctx.renameExpr().expr().getClass());
-            if (ctx.renameExpr().expr().getClass() == RaParser.RelationContext.class) {
+            if (ctx.renameExpr().expr().getClass() == RelationContext.class) {
                 // relation 리네임
                 if (ctx.renameExpr().renameAttrs() == null) {
                     StringJoiner query = new StringJoiner(SPACE);
@@ -258,7 +281,7 @@ public class RaInterpreter extends RaBaseVisitor {
                 // 어트리뷰트 리네임
             } else {
                 // 어트리뷰트를 생성
-                if (ctx.renameExpr().expr().getClass() == RaParser.RelationContext.class) {
+                if (ctx.renameExpr().expr().getClass() == RelationContext.class) {
                     log.debug("Make rename Attribute : expr={}", ctx.renameExpr().expr().getText());
                     String attrs = makeRenamedAttr(ctx.renameExpr().renameAttrs(), expr.toString());
                     query.add("SELECT").add(attrs).add("FROM").add(ctx.renameExpr().expr().getText());
@@ -273,16 +296,16 @@ public class RaInterpreter extends RaBaseVisitor {
     }
 
     @Override
-    public String visitOrderby(RaParser.OrderbyContext ctx) {
+    public String visitOrderby(OrderbyContext ctx) {
         boolean nesting = isNested(ctx.getParent());
         log.debug("nesting={} - orderby={}", nesting, ctx.orderbyExpr().getText());
+        beforeVisit = OrderbyContext.class;
         StringJoiner orders = new StringJoiner(",");
         for (int i = 0; i < ctx.orderbyExpr().orders().getChildCount(); i++) {
             OrderContext order = ctx.orderbyExpr().orders().order(i);
             if (order != null)
                 orders.add(order.attribute().getText() + SPACE + order.direction().getText());
         }
-        // 중
         if (nesting) {
             return "ORDER BY" + SPACE + orders.toString();
         } else {
@@ -291,14 +314,35 @@ public class RaInterpreter extends RaBaseVisitor {
         }
     }
 
+    @Override
+    public String visitGroupby(GroupbyContext ctx) {
+        Object expr = visit(ctx.groupbyExpr().expr());
+        GroupByAttrsContext groupbyAttrs = ctx.groupbyExpr().groupByAttrs();
+        StringJoiner attrs = new StringJoiner(COMMA);
+        for (GroupByAttrContext groupByAttrContext : groupbyAttrs.groupByAttr()) {
+            StringBuilder attr = new StringBuilder();
+            attr.append(groupByAttrContext.STRING(0)).append("(").append(groupByAttrContext.attributes().getText()).append(")").append(SPACE).append("as").append(SPACE).append(groupByAttrContext.STRING(1));
+            attrs.add(attr);
+        }
+        log.debug("attrs={} - expr={} - groupby={}", attrs, expr, ctx.groupbyExpr().attributes().getText());
+        StringJoiner query = new StringJoiner(SPACE);
+        query.add("SELECT")
+                .add(ctx.groupbyExpr().attributes().getText() + "," + attrs)
+                .add("FROM").add(expr.toString())
+                .add("GROUP BY").add(ctx.groupbyExpr().attributes().getText());
+        beforeVisit = GroupbyContext.class;
+        return query.toString();
+    }
+
     private String makeRenamedAttr(RenameAttrsContext attributes, String expr) {
+        beforeVisit = RenameAttrsContext.class;
         StringBuilder attr = new StringBuilder();
         RenameAttrsContext renameAttrs = attributes;
         // 조건 조합
         while (renameAttrs != null) {
             List<ParseTree> tree = renameAttrs.children;
             tree.stream()
-                    .filter(parseTree -> parseTree.getClass() == RaParser.RenameAttrContext.class)
+                    .filter(parseTree -> parseTree.getClass() == RenameAttrContext.class)
                     .map(attribute -> {
                         if (!attr.toString().equals(""))
                             attr.append(",");
@@ -317,15 +361,14 @@ public class RaInterpreter extends RaBaseVisitor {
 
     private String renameAttributes(RenameAttrsContext attributes, String sql) {
         StringJoiner renameAttributes = new StringJoiner(COMMA);
-        ;
         RenameAttrsContext renameAttrs = attributes;
         // 조건 조합
         while (renameAttrs != null) {
             List<ParseTree> tree = renameAttrs.children;
             StringBuilder attr = new StringBuilder();
             for (ParseTree parseTree : tree) {
-                if (parseTree.getClass() == RaParser.RenameAttrContext.class) {
-                    RaParser.RenameAttrContext attribute = (RaParser.RenameAttrContext) parseTree;
+                if (parseTree.getClass() == RenameAttrContext.class) {
+                    RenameAttrContext attribute = (RenameAttrContext) parseTree;
                     if (attribute.getChildCount() == 3) {
                         attr.append(attribute.getChild(2).getText()).append(" as ").append(attribute.getChild(0).getText());
                         log.debug("replace={} => to={}", attribute.getChild(2).getText(), attr);
@@ -340,6 +383,8 @@ public class RaInterpreter extends RaBaseVisitor {
     }
 
     private boolean isNested(ParserRuleContext parentContext) {
+        if (parentContext != null)
+            log.debug("Parent={} / {}", parentContext.getClass(), parentContext.getClass());
         return parentContext != null && !JOIN_OPERATOR.contains(parentContext.getClass());
     }
 }

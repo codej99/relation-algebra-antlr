@@ -32,6 +32,18 @@ public interface RaListener extends ParseTreeListener {
 	 */
 	void exitOrderby(RaParser.OrderbyContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code groupby}
+	 * labeled alternative in {@link RaParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterGroupby(RaParser.GroupbyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code groupby}
+	 * labeled alternative in {@link RaParser#expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitGroupby(RaParser.GroupbyContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code union}
 	 * labeled alternative in {@link RaParser#expr}.
 	 * @param ctx the parse tree
@@ -193,6 +205,36 @@ public interface RaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRenameExpr(RaParser.RenameExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RaParser#groupbyExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterGroupbyExpr(RaParser.GroupbyExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#groupbyExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitGroupbyExpr(RaParser.GroupbyExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RaParser#groupByAttrs}.
+	 * @param ctx the parse tree
+	 */
+	void enterGroupByAttrs(RaParser.GroupByAttrsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#groupByAttrs}.
+	 * @param ctx the parse tree
+	 */
+	void exitGroupByAttrs(RaParser.GroupByAttrsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link RaParser#groupByAttr}.
+	 * @param ctx the parse tree
+	 */
+	void enterGroupByAttr(RaParser.GroupByAttrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link RaParser#groupByAttr}.
+	 * @param ctx the parse tree
+	 */
+	void exitGroupByAttr(RaParser.GroupByAttrContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code nestedRelation}
 	 * labeled alternative in {@link RaParser#relationExpr}.

@@ -11,6 +11,7 @@ expr :
     | expr (CARTESIAN expr)+ #catesianProduct
     | selectionExpr #selection
     | projectionExpr #projection
+    | groupbyExpr #groupby
     | renameExpr #rename
     | orderbyExpr #orderby
     | relationExpr #relation
@@ -29,8 +30,21 @@ renameExpr :
     | RENAME renameAttrs expr
 ;
 
+groupbyExpr :
+    GROUP_BY attributes SEMI groupByAttrs expr
+;
+
+groupByAttrs :
+    groupByAttr
+    | groupByAttr COMMA groupByAttr
+;
+
+groupByAttr :
+    STRING LPAREN attributes RPAREN ARROW STRING
+;
+
 relationExpr :
-    LBRACE expr RBRACE #nestedRelation
+    LPAREN expr RPAREN #nestedRelation
     | STRING #simpleRelation
 ;
 
@@ -142,13 +156,19 @@ GREATER: '>';
 LESSER_EQUAL: '<=';
 LESSER: '<';
 
-STRING: [a-zA-Z0-9_']+ ;
+
+
+STRING: [a-zA-Z0-9_'*]+ ;
 NUMBER: [0-9]+ ;
 
 PERIOD: '.';
 COMMA: ',';
-LBRACE: '(';
-RBRACE: ')';
+LPAREN: '(';
+RPAREN: ')';
+ARROW: '→';
+SEMI: ';';
+
+//COMMENT : '//' .+? ('\n'|EOF) -> skip ;
 
 WS
 :

@@ -2,7 +2,7 @@
 - Change the relation algebra to sql query using antlr4
 
 ### Document
-- https://daddyprogrammer.org/post/13525/relation-algebra/
+- https://daddyprogrammer.org/post/13525/relation-algebra
 - https://daddyprogrammer.org/post/13539/relational-algebra-sql-interpreter-by-antlr
 
 ### Support

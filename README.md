@@ -34,11 +34,11 @@
 
 #### Projection + Selection
     - Input : π R.a, R.b σ R.a > 0 R
-    - Output :  SELECT R.a,R.b FROM R WHERE R.a>0
+    - Output : SELECT R.a,R.b FROM R WHERE R.a>0
   
 #### Rename
     - Input : π Rel.b ρ Rel R
-    - Output :  SELECT Rel.b FROM R as Rel
+    - Output : SELECT Rel.b FROM R as Rel
   
 #### Rename Attribute
     - Input : ρ aa←a, bb←b, c R
@@ -68,10 +68,10 @@
     - Output : SELECT * FROM S INNER JOIN T ON S.b=T.b
 
     - Input : R ⟕ R.b = T.b T
-    - Output : SELECT * FROM R LEFT JOIN T ON R.b=T.b
+    - Output : SELECT * FROM R LEFT OUTER JOIN T ON R.b=T.b
 
     - Input : R ⟖ R.b = T.b T
-    - Output : SELECT * FROM R RIGHT JOIN T ON R.b=T.b
+    - Output : SELECT * FROM R RIGHT OUTER JOIN T ON R.b=T.b
 
     - Input : R ⟗ R.b = T.b T
     - Output : SELECT * FROM R FULL OUTER JOIN T ON R.b=T.b

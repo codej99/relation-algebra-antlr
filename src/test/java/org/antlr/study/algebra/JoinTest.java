@@ -118,7 +118,7 @@ public class JoinTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT * FROM R LEFT JOIN T ON R.b=T.b", query);
+        assertEquals("SELECT * FROM R LEFT OUTER JOIN T ON R.b=T.b", query);
     }
 
     @Test
@@ -132,7 +132,7 @@ public class JoinTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT * FROM R LEFT JOIN T ON R.b=T.b", query);
+        assertEquals("SELECT * FROM R LEFT OUTER JOIN T ON R.b=T.b", query);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class JoinTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT * FROM R LEFT JOIN T ON R.b=T.b WHERE R.a>1", query);
+        assertEquals("SELECT * FROM R LEFT OUTER JOIN T ON R.b=T.b WHERE R.a>1", query);
     }
 
     @Test
@@ -160,7 +160,7 @@ public class JoinTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT R.a FROM R LEFT JOIN T ON R.b=T.b WHERE R.a>1", query);
+        assertEquals("SELECT R.a FROM R LEFT OUTER JOIN T ON R.b=T.b WHERE R.a>1", query);
     }
 
     @Test
@@ -174,7 +174,7 @@ public class JoinTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT * FROM R RIGHT JOIN T ON R.b=T.b", query);
+        assertEquals("SELECT * FROM R RIGHT OUTER JOIN T ON R.b=T.b", query);
     }
 
     @Test
@@ -188,7 +188,7 @@ public class JoinTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT * FROM R RIGHT JOIN T ON R.b=T.b", query);
+        assertEquals("SELECT * FROM R RIGHT OUTER JOIN T ON R.b=T.b", query);
     }
 
     @Test
@@ -202,7 +202,7 @@ public class JoinTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT * FROM R RIGHT JOIN T ON R.b=T.b WHERE R.a>1", query);
+        assertEquals("SELECT * FROM R RIGHT OUTER JOIN T ON R.b=T.b WHERE R.a>1", query);
     }
 
     @Test
@@ -216,7 +216,7 @@ public class JoinTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT R.a FROM R RIGHT JOIN T ON R.b=T.b WHERE R.a>1", query);
+        assertEquals("SELECT R.a FROM R RIGHT OUTER JOIN T ON R.b=T.b WHERE R.a>1", query);
     }
 
     @Test

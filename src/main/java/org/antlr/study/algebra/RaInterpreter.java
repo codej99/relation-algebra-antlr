@@ -92,7 +92,7 @@ public class RaInterpreter extends RaBaseVisitor {
         Object right = visit(ctx.expr(1));
         StringJoiner subQuery = new StringJoiner(SPACE);
         if (ctx.condition() != null)
-            subQuery.add(left.toString()).add("LEFT JOIN").add(right.toString()).add("ON").add(ctx.condition().getText());
+            subQuery.add(left.toString()).add("LEFT OUTER JOIN").add(right.toString()).add("ON").add(ctx.condition().getText());
 
         boolean nesting = ctx.getParent() != null;
         String query = makeQuery(nesting, subQuery.toString());
@@ -106,7 +106,7 @@ public class RaInterpreter extends RaBaseVisitor {
         Object right = visit(ctx.expr(1));
         StringJoiner subQuery = new StringJoiner(SPACE);
         if (ctx.condition() != null)
-            subQuery.add(left.toString()).add("RIGHT JOIN").add(right.toString()).add("ON").add(ctx.condition().getText());
+            subQuery.add(left.toString()).add("RIGHT OUTER JOIN").add(right.toString()).add("ON").add(ctx.condition().getText());
 
         boolean nesting = ctx.getParent() != null;
         String query = makeQuery(nesting, subQuery.toString());

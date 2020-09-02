@@ -103,7 +103,7 @@ public class ComplexTest {
         log.info(tree.toStringTree(parser));
         RaInterpreter interpreter = new RaInterpreter();
         Object query = interpreter.visit(tree);
-        assertEquals("SELECT o.a,COUNT(o.a) as total FROM ((SELECT x.a,x.b,x.c FROM R as x LEFT JOIN S as y ON x.b=y.b INNER JOIN T as z ON y.d=z.d) INTERSECT (SELECT x.a,x.b,x.c FROM R as x INNER JOIN S as y ON x.b=y.b INNER JOIN T as z ON y.d=z.d)) as o GROUP BY o.a ORDER BY total desc", query);
+        assertEquals("SELECT o.a,COUNT(o.a) as total FROM ((SELECT x.a,x.b,x.c FROM R as x LEFT OUTER JOIN S as y ON x.b=y.b INNER JOIN T as z ON y.d=z.d) INTERSECT (SELECT x.a,x.b,x.c FROM R as x INNER JOIN S as y ON x.b=y.b INNER JOIN T as z ON y.d=z.d)) as o GROUP BY o.a ORDER BY total desc", query);
     }
 
 }

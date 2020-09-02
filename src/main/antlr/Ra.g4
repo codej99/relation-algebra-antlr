@@ -8,13 +8,14 @@ expr :
     | expr LEFT_OUTER_JOIN condition expr #leftJoin
     | expr RIGHT_OUTER_JOIN condition expr #rightJoin
     | expr FULL_OUTER_JOIN condition expr #fullJoin
-    | expr (CARTESIAN expr)+ #catesianProduct
+    | expr CARTESIAN expr #catesianProduct
     | selectionExpr #selection
     | projectionExpr #projection
     | groupbyExpr #groupby
     | renameExpr #rename
     | orderbyExpr #orderby
-    | relationExpr #relation
+    | LPAREN expr RPAREN #nestedRelation
+    | STRING #simpleRelation
 ;
 
 selectionExpr :
@@ -41,11 +42,6 @@ groupByAttrs :
 
 groupByAttr :
     STRING LPAREN attributes RPAREN ARROW STRING
-;
-
-relationExpr :
-    LPAREN expr RPAREN #nestedRelation
-    | STRING #simpleRelation
 ;
 
 orderbyExpr :
@@ -202,3 +198,5 @@ fragment W : [wW];
 fragment X : [xX];
 fragment Y : [yY];
 fragment Z : [zZ];
+
+

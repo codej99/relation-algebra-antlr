@@ -5,6 +5,7 @@ DIV=4
 ADD=5
 SUB=6
 NUMBER=7
+WS=8
 '('=1
 ')'=2
 '*'=3

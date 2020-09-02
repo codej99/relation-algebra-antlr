@@ -16,7 +16,7 @@ public class GroupbyTest {
     private static final Logger log = LoggerFactory.getLogger(GroupbyTest.class);
 
     @Test
-    public void groupbyTest() {
+    public void 그룹핑테스트() {
         String ra = "γ R.a, R.b; count(*)→cnt, sum(R.a)→sum σ R.a > 1 R";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -29,7 +29,7 @@ public class GroupbyTest {
     }
 
     @Test
-    public void groupbyProjectionTest() {
+    public void 그룹핑ProjectionSelection조합테스트() {
         String ra = "π R.a, R.b, cnt, sum γ R.a, R.b; count(*)→cnt, sum(R.a)→sum σ R.a > 1 R";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -42,7 +42,7 @@ public class GroupbyTest {
     }
 
     @Test
-    public void groupbyOrderbyProjectionTest() {
+    public void 그룹핑ProjectionOrderby테스트() {
         String ra = "τ R.a desc π R.a, R.b, cnt, sum γ R.a, R.b; count(*)→cnt, sum(R.a)→sum σ R.a > 1 R";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);

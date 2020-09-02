@@ -17,7 +17,7 @@ public class CalculatorParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, MUL=3, DIV=4, ADD=5, SUB=6, NUMBER=7;
+		T__0=1, T__1=2, MUL=3, DIV=4, ADD=5, SUB=6, NUMBER=7, WS=8;
 	public static final int
 		RULE_expression = 0, RULE_number = 1;
 	private static String[] makeRuleNames() {
@@ -35,7 +35,7 @@ public class CalculatorParser extends Parser {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, "MUL", "DIV", "ADD", "SUB", "NUMBER"
+			null, null, null, "MUL", "DIV", "ADD", "SUB", "NUMBER", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -368,7 +368,7 @@ public class CalculatorParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\t\34\4\2\t\2\4\3"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\n\34\4\2\t\2\4\3"+
 		"\t\3\3\2\3\2\3\2\3\2\3\2\3\2\5\2\r\n\2\3\2\3\2\3\2\3\2\3\2\3\2\7\2\25"+
 		"\n\2\f\2\16\2\30\13\2\3\3\3\3\3\3\2\3\2\4\2\4\2\4\3\2\5\6\3\2\7\b\2\34"+
 		"\2\f\3\2\2\2\4\31\3\2\2\2\6\7\b\2\1\2\7\r\5\4\3\2\b\t\7\3\2\2\t\n\5\2"+

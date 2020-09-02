@@ -1,4 +1,4 @@
-package org.antlr.study.caculator;
+package org.antlr.study.calculator;
 
 import org.antlr.study.generated.CalculatorLexer;
 import org.antlr.study.generated.CalculatorParser;

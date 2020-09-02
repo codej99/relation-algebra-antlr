@@ -15,9 +15,23 @@ public class UnionTest {
     private static final Logger log = LoggerFactory.getLogger(UnionTest.class);
 
     @Test
+    public void unionTest0() {
+        String ra = "π b, d S ∪ π b, d T";
+//        String ra = "π b, d (S) ∪ π b, d (T)";
+        RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        RaParser parser = new RaParser(tokens);
+        ParseTree tree = parser.expr();
+        log.info(tree.toStringTree(parser));
+        RaInterpreter interpreter = new RaInterpreter();
+        Object query = interpreter.visit(tree);
+        assertEquals("SELECT b,d FROM S UNION SELECT b,d FROM T", query);
+    }
+
+    @Test
     public void unionTest() {
-//        String ra = "(π b, d S) ∪ (π b, d T)";
-        String ra = "(π b, d (S)) ∪ (π b, d (T))";
+        String ra = "(π b, d S) ∪ (π b, d T)";
+//        String ra = "π b, d (S) ∪ π b, d (T)";
         RaLexer lexer = new RaLexer(CharStreams.fromString(ra));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         RaParser parser = new RaParser(tokens);

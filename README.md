@@ -1,11 +1,33 @@
-#### Unary Relational Operations : 단항관계연산
-- SELECT (symbol: σ)
-- PROJECT (symbol: π)
-- RENAME (symbol: ρ)
+# Relation-algebra-antlr
+- Change the relation algebra to sql query using antlr4
 
-#### Relational Algebra Operations From Set Theory : 집합이론의 관계대수 연산
-- UNION (∪)
-- INTERSECTION (∩),
-- DIFFERENCE (-)
-- CARTESIAN PRODUCT (⨯)
+### Support
+- Projection
+- Selection
+- Rename
+- InterSection
+- Union
+- Set Difference
+- Join
+  - natural join
+  - inner join
+  - left outer join
+  - right outer join
+- order by
+- group by
 
+### Create parser
+- grammer source
+  - src/main/antlr/Ra.g4
+- create parser
+  - ./gradlew generateGrammarSource
+- generated path
+  - src/main/java/org/antlr/study/generated
+
+### Interpreter Test
+- Interpreter
+  - src/main/java/org/antlr/study/algebra/RaInterpreter
+- Test code
+  - src/test/java/org/antlr/study/algebra
+- Test
+  - ./gradlew test

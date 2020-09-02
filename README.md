@@ -17,7 +17,7 @@
 - group by
 
 ### Create parser
-- grammer source
+- grammar source
   - src/main/antlr/Ra.g4
 - create parser
   - ./gradlew generateGrammarSource

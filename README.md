@@ -1,3 +1,6 @@
+![Java_8](https://img.shields.io/badge/java-v1.8-red?logo=java)
+![Antlr](https://img.shields.io/badge/Antlr-v4-green.svg)
+
 # Relation-algebra-antlr
 - Change the relation algebra to sql query using antlr4
 
